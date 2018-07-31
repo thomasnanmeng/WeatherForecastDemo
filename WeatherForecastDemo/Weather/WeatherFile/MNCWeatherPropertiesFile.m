@@ -18,7 +18,7 @@
 @end
 
 @implementation MNCWeatherPropertiesFile
-
+#pragma mark - Lift cycle
 - (instancetype)init {
     if (!self) {
         self = [super init];
@@ -30,46 +30,8 @@
     return self;
 }
 
-- (void)initWeatherData {
-    NSString *dir = [self getSaveFiledDir];
-    NSString *path = [self getSaveFileName];
-    [[NSFileManager defaultManager] createDirectoryAtPath: dir
-                              withIntermediateDirectories:YES
-                                               attributes: nil error: nil];
-        
-    if ([[NSFileManager defaultManager] fileExistsAtPath: path]) {
-        _weatherPropertiesInFiled = [NSMutableArray arrayWithContentsOfFile: path];
-    } else {
-        NSString *initPath = [[NSBundle mainBundle] pathForResource: @"MNCWeatherPropertiesDataFile"
-                                                             ofType: @"plist"];
-        _weatherPropertiesInFiled = [NSMutableArray arrayWithContentsOfFile: initPath];
-        [_weatherPropertiesInFiled writeToFile: path atomically: YES];
-    }
-    _weatherPropertiesInFiled = [NSMutableArray arrayWithContentsOfFile: path];
-}
-
-- (void)updataWeacherDataToFiled:(NSNotification *)notification {
-    NSLog(@"我收到通知了");
-    [self changeWeatherPropertiesToFiled:notification.object];
-}
-
-- (void)addWeatherPropertiesToFiled:(NSString *)key value:(NSString *)value
-                              indix:(NSUInteger) index {
-    if(key) {
-        [[self.weatherPropertiesInFiled objectAtIndex:index] setValue:value forKey:key];
-    }
-    [self.weatherPropertiesInFiled writeToFile:[self getSaveFileName] atomically:YES];
-}
-
-- (void)deleteWeatherPropertiesToFiled:(NSString *)key {
-    if (key) {
-        for (NSUInteger i = 0; i< self.weatherPropertiesInFiled.count; i++) {
-            [[self.weatherPropertiesInFiled objectAtIndex:i] removeObjectForKey:key];
-        }
-        [self.weatherPropertiesInFiled writeToFile:[self getSaveFileName] atomically:YES];
-    }
-}
-
+#pragma mark - Overridden methods
+#pragma mark - Public methods
 - (void)changeWeatherPropertiesToFiled:(NSArray *)weatherPropertyArray{
     //传进来的是所有拉下来的数据 ，格式为 arra  里面为几个dic
     if ([weatherPropertyArray count]) {
@@ -90,6 +52,41 @@
         }
     }
     NSLog(@"写入文件");
+}
+#pragma mark - Private methods
+- (void)initWeatherData {
+    NSString *dir = [self getSaveFiledDir];
+    NSString *path = [self getSaveFileName];
+    [[NSFileManager defaultManager] createDirectoryAtPath: dir
+                              withIntermediateDirectories:YES
+                                               attributes: nil error: nil];
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath: path]) {
+        _weatherPropertiesInFiled = [NSMutableArray arrayWithContentsOfFile: path];
+    } else {
+        NSString *initPath = [[NSBundle mainBundle] pathForResource: @"MNCWeatherPropertiesDataFile"
+                                                             ofType: @"plist"];
+        _weatherPropertiesInFiled = [NSMutableArray arrayWithContentsOfFile: initPath];
+        [_weatherPropertiesInFiled writeToFile: path atomically: YES];
+    }
+    _weatherPropertiesInFiled = [NSMutableArray arrayWithContentsOfFile: path];
+}
+
+- (void)addWeatherPropertiesToFiled:(NSString *)key value:(NSString *)value
+                              indix:(NSUInteger) index {
+    if(key) {
+        [[self.weatherPropertiesInFiled objectAtIndex:index] setValue:value forKey:key];
+    }
+    [self.weatherPropertiesInFiled writeToFile:[self getSaveFileName] atomically:YES];
+}
+
+- (void)deleteWeatherPropertiesToFiled:(NSString *)key {
+    if (key) {
+        for (NSUInteger i = 0; i< self.weatherPropertiesInFiled.count; i++) {
+            [[self.weatherPropertiesInFiled objectAtIndex:i] removeObjectForKey:key];
+        }
+        [self.weatherPropertiesInFiled writeToFile:[self getSaveFileName] atomically:YES];
+    }
 }
 
 - (void)changeWeatherPropertiesToFiledInDetail:(NSDictionary *)weatherProperty info:(NSString *)flag {
@@ -133,6 +130,12 @@
     NSString *dir = [self getSaveFiledDir];
     NSString *path = [dir stringByAppendingPathComponent:@"MNCWeatherPropertiesDataFile.plist"];
     return path;
+}
+
+#pragma mark - Notification
+- (void)updataWeacherDataToFiled:(NSNotification *)notification {
+    NSLog(@"我收到通知了");
+    [self changeWeatherPropertiesToFiled:notification.object];
 }
 
 @end

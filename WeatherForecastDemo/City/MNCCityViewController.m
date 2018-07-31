@@ -20,6 +20,7 @@ NSString * const kCityNameCKey = @"cityNameC";
 @end
 
 @implementation MNCCityViewController
+#pragma mark - Lift cycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -33,14 +34,9 @@ NSString * const kCityNameCKey = @"cityNameC";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-#pragma mark UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-}
 
 
-
-#pragma mark UITableViewDataSource
+#pragma mark - UItableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return  0;
 }
@@ -51,6 +47,10 @@ NSString * const kCityNameCKey = @"cityNameC";
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    
+}
+#pragma mark - UItableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }
 

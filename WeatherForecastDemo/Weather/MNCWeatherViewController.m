@@ -58,7 +58,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Public methods
 #pragma mark - Private methods
 - (void)initImageView {
     self.imageView = [[UIImageView alloc] init];
@@ -167,8 +166,6 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     //
 }
-#pragma mark - UItableViewDataSource
-#pragma mark - UItableViewDelegate
 #pragma mark - setter && getter
 - (MNCWeatherPropertiesFile *)weatherPropertiesFile {
     if (!_weatherPropertiesFile) {

@@ -16,7 +16,7 @@
 @end
 
 @implementation MNCSimpleWeatherView
-
+#pragma mark - Lift cycle
 - (instancetype)init
 {
     self = [super init];
@@ -25,61 +25,20 @@
     [self createUI];
     return self;
 }
-
-- (void)createUI {
-//    UILabel *dateLab = [[UILabel alloc] initWithFrame:
-//                        CGRectMake(rect.origin.x + 10,
-//                                   rect.origin.y + 10,
-//                                   (rect.size.width - 20) / 4,
-//                                   rect.size.height / 4)];
-    UILabel *dateLab = [[UILabel alloc] initWithFrame:
-                        CGRectMake(10,0,50,50)];
-    dateLab.font = [UIFont fontWithName:@"Arial" size:20];
-    dateLab.textAlignment = NSTextAlignmentLeft;
-    dateLab.tag = 100;
-    [self addSubview:dateLab];
-    
-//    UILabel *tmpLab = [[UILabel alloc] initWithFrame:
-//                        CGRectMake(rect.origin.x + dateLab.frame.size.width + 10,
-//                                   rect.origin.y + 10  ,
-//                                   (rect.size.width - 20) - 40,
-//                                   rect.size.height / 4)];
-    UILabel *tmpLab = [[UILabel alloc] initWithFrame:
-                       CGRectMake(dateLab.bounds.size.width,dateLab.bounds.origin.y,150,50)];
-    tmpLab.font = [UIFont fontWithName:@"Arial" size:20];
-    tmpLab.textAlignment = NSTextAlignmentCenter;
-    tmpLab.tag = 101;
-    [self addSubview:tmpLab];
-    
-    UILabel *weatherLab = [[UILabel alloc] initWithFrame:
-                           CGRectMake(10, 50 + 10,100,50)];
-    weatherLab.font = [UIFont fontWithName:@"Arial" size:20];
-    weatherLab.textAlignment = NSTextAlignmentLeft;
-    weatherLab.tag = 102;
-    [self addSubview:weatherLab];
-
-    UIImageView *weatherImagV = [[UIImageView alloc] init];
-    weatherImagV.tag = 103;
-    weatherImagV.frame = CGRectMake(weatherLab.bounds.size.width + 10 ,
-                                    50 + 10,
-                                    50,
-                                    50);
-    [self addSubview:weatherImagV];
-}
-
+#pragma mark - Public methods
 - (void)createUIData:(NSUInteger)index {
-
+    
     NSString *tmpMax = [self.simpleWeatherData updataTmpMaxData:index];
     NSString *tmpMin = [self.simpleWeatherData updataTmpMinData:index];
     NSString *condStata = [self.simpleWeatherData updataWeatherState:index];
     
     UILabel *tmpLab = (UILabel *)[self viewWithTag:101];
     tmpLab.text = [NSString stringWithFormat:@"%d/%d℃",([tmpMax intValue] - 32) * 5 / 9,
-                       ([tmpMin intValue] - 32) * 5 / 9];
-        
+                   ([tmpMin intValue] - 32) * 5 / 9];
+    
     UILabel *weatherLab = (UILabel *)[self viewWithTag:102];
     weatherLab.text = [NSString stringWithFormat:@"%@",[self pinYinFromString:condStata]];
-        
+    
     UIImageView *weatherImage = (UIImageView *)[self viewWithTag:103];
     UIImage *image = [self updataWeatherImageIcon:condStata];
     weatherImage.image = image;
@@ -93,11 +52,50 @@
     }
     [self.weatherViewController.simpleRightView addSubview:self];
 }
-
+#pragma mark - Private methods
+- (void)createUI {
+    //    UILabel *dateLab = [[UILabel alloc] initWithFrame:
+    //                        CGRectMake(rect.origin.x + 10,
+    //                                   rect.origin.y + 10,
+    //                                   (rect.size.width - 20) / 4,
+    //                                   rect.size.height / 4)];
+    UILabel *dateLab = [[UILabel alloc] initWithFrame:
+                        CGRectMake(10,0,50,50)];
+    dateLab.font = [UIFont fontWithName:@"Arial" size:20];
+    dateLab.textAlignment = NSTextAlignmentLeft;
+    dateLab.tag = 100;
+    [self addSubview:dateLab];
+    
+    //    UILabel *tmpLab = [[UILabel alloc] initWithFrame:
+    //                        CGRectMake(rect.origin.x + dateLab.frame.size.width + 10,
+    //                                   rect.origin.y + 10  ,
+    //                                   (rect.size.width - 20) - 40,
+    //                                   rect.size.height / 4)];
+    UILabel *tmpLab = [[UILabel alloc] initWithFrame:
+                       CGRectMake(dateLab.bounds.size.width,dateLab.bounds.origin.y,150,50)];
+    tmpLab.font = [UIFont fontWithName:@"Arial" size:20];
+    tmpLab.textAlignment = NSTextAlignmentCenter;
+    tmpLab.tag = 101;
+    [self addSubview:tmpLab];
+    
+    UILabel *weatherLab = [[UILabel alloc] initWithFrame:
+                           CGRectMake(10, 50 + 10,100,50)];
+    weatherLab.font = [UIFont fontWithName:@"Arial" size:20];
+    weatherLab.textAlignment = NSTextAlignmentLeft;
+    weatherLab.tag = 102;
+    [self addSubview:weatherLab];
+    
+    UIImageView *weatherImagV = [[UIImageView alloc] init];
+    weatherImagV.tag = 103;
+    weatherImagV.frame = CGRectMake(weatherLab.bounds.size.width + 10 ,
+                                    50 + 10,
+                                    50,
+                                    50);
+    [self addSubview:weatherImagV];
+}
 - (void)updataSubviewsFromShowLineImageView {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
-
 - (NSString *)pinYinFromString:(NSString *)string {
     if ([string isEqualToString:@"Cloudy"]) {//多云
         return @"多云";
@@ -158,10 +156,9 @@
     } else if ([condTextDay isEqualToString:@"Sunny/Clear"]) {//晴
         image = [UIImage imageNamed:@"sunshine.png"];
     }
-
+    
     return image;
 }
-
 #pragma mark setter && getter
 - (MNCSimpleWeatherData *)simpleWeatherData {
     if (!_simpleWeatherData) {

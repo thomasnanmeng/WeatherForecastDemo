@@ -16,6 +16,8 @@
 
 @implementation MNCSimpleWeatherData
 
+
+#pragma mark - Lift cycle
 - (instancetype)init
 {
     self = [super init];
@@ -26,7 +28,7 @@
     return self;
 }
 
-
+#pragma mark - Public methods
 - (void)initSimpleWeatherPropertiesFromDic:(NSDictionary *)propretiesDic {
     if ([propretiesDic count]) {
         NSArray *propertiesArray = [propretiesDic allValues];
@@ -39,27 +41,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCSimpleWeatherFromWebNotification"
                                                         object:self];
     [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSNotificationName)#> object:<#(nullable id)#> userInfo:<#(nullable NSDictionary *)#>];
-}
-
-- (void)initWeatherPropertiesFromPlist:(NSUInteger) index {
-    //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
-    if (![self.weatherDataFile.weatherPropertiesInFiled count]) {
-        self.weatherDataFile = [[MNCWeatherPropertiesFile alloc] init];
-    }
-    NSMutableDictionary *dic = [self.weatherDataFile.weatherPropertiesInFiled objectAtIndex:index];
-    for (NSString *weatherProperty in [dic allKeys]) {
-        if ([weatherProperty isEqualToString:@"cond_txt_d"]) {
-            self.simpleWeatherCondTextDay = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"cond_txt_n"]) {
-            self.simpleWeatherCondTextNight = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"tmp_max"]) {
-            self.simpleWeatherTmpMax = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"tmp_min"]) {
-            self.simpleWeatherTmpMin = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"date"]) {
-            self.simpleWeatherCurrentDate = [dic objectForKey:weatherProperty];
-        }
-    }
 }
 
 - (NSString *)updataTmpMaxData:(NSUInteger)index {
@@ -87,4 +68,28 @@
         [self initWeatherPropertiesFromPlist:index];
     }    return self.simpleWeatherCurrentDate;
 }
+
+#pragma mark - Private methods
+- (void)initWeatherPropertiesFromPlist:(NSUInteger) index {
+    //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
+    if (![self.weatherDataFile.weatherPropertiesInFiled count]) {
+        self.weatherDataFile = [[MNCWeatherPropertiesFile alloc] init];
+    }
+    NSMutableDictionary *dic = [self.weatherDataFile.weatherPropertiesInFiled objectAtIndex:index];
+    for (NSString *weatherProperty in [dic allKeys]) {
+        if ([weatherProperty isEqualToString:@"cond_txt_d"]) {
+            self.simpleWeatherCondTextDay = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"cond_txt_n"]) {
+            self.simpleWeatherCondTextNight = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"tmp_max"]) {
+            self.simpleWeatherTmpMax = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"tmp_min"]) {
+            self.simpleWeatherTmpMin = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"date"]) {
+            self.simpleWeatherCurrentDate = [dic objectForKey:weatherProperty];
+        }
+    }
+}
+
+
 @end

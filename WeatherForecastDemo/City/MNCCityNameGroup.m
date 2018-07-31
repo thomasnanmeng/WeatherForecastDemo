@@ -15,6 +15,7 @@
 
 @implementation MNCCityNameGroup
 
+#pragma mark - Lift cycle
 - (instancetype)init
 {
     self = [super init];
@@ -24,6 +25,7 @@
     return self;
 }
 
+#pragma mark - Private methods
 - (void)initCityNameGroup {
     NSString *dir = [self getSaveFiledDir];
     NSString *path = [self getSaveFileName];

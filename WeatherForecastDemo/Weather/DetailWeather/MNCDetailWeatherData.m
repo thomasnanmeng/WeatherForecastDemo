@@ -31,7 +31,7 @@
 @end
 
 @implementation MNCDetailWeatherData
-
+#pragma mark - Lift cycle
 - (instancetype)init
 {
     self = [super init];
@@ -41,6 +41,7 @@
     return self;
 }
 
+#pragma mark - Public methods
 - (void)initDetailWeatherPropertiesFromDic:(NSDictionary *)propretiesDic info:(NSString *)flag {
     if ([flag isEqualToString:@"basic"]) {
         [self initBisicWeatherProperties:propretiesDic];
@@ -50,78 +51,6 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCDetailWeatherDataNotification"
                                                         object:self];
 }
-//初始化基本参数 basic
-- (void)initBisicWeatherProperties:(NSDictionary *)propretiesDic {
-    if ([propretiesDic count]) {
-        NSArray *propertiesArray = [propretiesDic allValues];
-        self.location = propertiesArray[0];
-        self.cnty = propertiesArray[1];
-        self.tz = propertiesArray[2];
-        self.adminArea = propertiesArray[3];
-        self.cityLon = propertiesArray[4];
-        self.cityLat = propertiesArray[5];
-        self.parentCity = propertiesArray[6];
-    }
-}
-
-//初始化today相关参数
-- (void)initDetailWeatherProperties:(NSDictionary *)propretiesDic {
-    if ([propretiesDic count]) {
-        NSArray *propertiesArray = [propretiesDic allValues];
-        self.condCodeDay = propertiesArray[1];
-        self.temperatureMax = propertiesArray[2];
-        self.hum = propertiesArray[3];
-        self.windSpeed = propertiesArray[4];
-        self.pres = propertiesArray[6];
-        self.vis = propertiesArray[8];
-        self.windDirection = propertiesArray[9];
-        self.condTxtDay = propertiesArray[10];
-        self.condTxtNight = propertiesArray[11];
-        self.currentTime = propertiesArray[12];
-        self.temperatureMin = propertiesArray[15];
-        self.windForce = propertiesArray[16];
-        self.windDeg = propertiesArray[18];
-        self.condCodeNight = propertiesArray[20];
-        self.pop = propertiesArray[22];
-        self.pcpn = propertiesArray[21];
-    }
-}
-
-//当没有网时，使用plist缓存数据
-- (void)initDetailWeatherPropertiesFromPlist {
-    //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
-    if (![self.weatherDataFile.weatherPropertiesInFiled count]) {
-        self.weatherDataFile = [[MNCWeatherPropertiesFile alloc] init];
-    }
-    NSMutableDictionary *dic = [self.weatherDataFile.weatherPropertiesInFiled objectAtIndex:0];
-    for (NSString *weatherProperty in [dic allKeys]) {
-        if ([weatherProperty isEqualToString:@"admin_area"]) {
-            self.adminArea = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"cond_txt_d"]) { //白天天气状况
-            self.condTxtDay = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"cond_txt_n"]) {//晚上天气状况
-            self.condTxtNight = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"date"]) {//时间
-            self.currentTime = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"wind_sc"]) {//风力
-            self.windForce = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"location"]) {//地区
-            self.location = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"tmp_max"]) {//温度最高
-            self.temperatureMax = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"tmp_min"]) {//温度最低
-            self.temperatureMin = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"pcpn"]) {//降水量
-            self.pcpn = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"vis"]) {//能见度
-            self.vis = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"hum"]) { //相对湿度
-            self.hum = [dic objectForKey:weatherProperty];
-        }
-    }
-}
-
-#pragma mark updataData
 - (NSString *)updataTempMax {
     if (!self.temperatureMax) {
         [self initDetailWeatherPropertiesFromPlist];
@@ -169,7 +98,76 @@
     return self.currentTime;
 }
 
-#pragma mark private
+#pragma mark - Private methods
+//初始化基本参数 basic
+- (void)initBisicWeatherProperties:(NSDictionary *)propretiesDic {
+    if ([propretiesDic count]) {
+        NSArray *propertiesArray = [propretiesDic allValues];
+        self.location = propertiesArray[0];
+        self.cnty = propertiesArray[1];
+        self.tz = propertiesArray[2];
+        self.adminArea = propertiesArray[3];
+        self.cityLon = propertiesArray[4];
+        self.cityLat = propertiesArray[5];
+        self.parentCity = propertiesArray[6];
+    }
+}
+
+//初始化today相关参数
+- (void)initDetailWeatherProperties:(NSDictionary *)propretiesDic {
+    if ([propretiesDic count]) {
+        NSArray *propertiesArray = [propretiesDic allValues];
+        self.condCodeDay = propertiesArray[1];
+        self.temperatureMax = propertiesArray[2];
+        self.hum = propertiesArray[3];
+        self.windSpeed = propertiesArray[4];
+        self.pres = propertiesArray[6];
+        self.vis = propertiesArray[8];
+        self.windDirection = propertiesArray[9];
+        self.condTxtDay = propertiesArray[10];
+        self.condTxtNight = propertiesArray[11];
+        self.currentTime = propertiesArray[12];
+        self.temperatureMin = propertiesArray[15];
+        self.windForce = propertiesArray[16];
+        self.windDeg = propertiesArray[18];
+        self.condCodeNight = propertiesArray[20];
+        self.pop = propertiesArray[22];
+        self.pcpn = propertiesArray[21];
+    }
+}
+- (void)initDetailWeatherPropertiesFromPlist {
+    //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
+    if (![self.weatherDataFile.weatherPropertiesInFiled count]) {
+        self.weatherDataFile = [[MNCWeatherPropertiesFile alloc] init];
+    }
+    NSMutableDictionary *dic = [self.weatherDataFile.weatherPropertiesInFiled objectAtIndex:0];
+    for (NSString *weatherProperty in [dic allKeys]) {
+        if ([weatherProperty isEqualToString:@"admin_area"]) {
+            self.adminArea = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"cond_txt_d"]) { //白天天气状况
+            self.condTxtDay = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"cond_txt_n"]) {//晚上天气状况
+            self.condTxtNight = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"date"]) {//时间
+            self.currentTime = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"wind_sc"]) {//风力
+            self.windForce = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"location"]) {//地区
+            self.location = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"tmp_max"]) {//温度最高
+            self.temperatureMax = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"tmp_min"]) {//温度最低
+            self.temperatureMin = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"pcpn"]) {//降水量
+            self.pcpn = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"vis"]) {//能见度
+            self.vis = [dic objectForKey:weatherProperty];
+        } else if ([weatherProperty isEqualToString:@"hum"]) { //相对湿度
+            self.hum = [dic objectForKey:weatherProperty];
+        }
+    }
+}
+
 - (NSString *)description {
     return [NSString stringWithFormat: @"location: %@, cnty: %@, tz: %@, adminArea: %@, cityLon: %@, cityLat: %@, parentCity: %@, condCodeDay: %@, temperatureMax: %@, hum: %@, windSpeed: %@, pres: %@, vis: %@, windDirection: %@, condTxtDay: %@, condTxtNight: %@, currentTime: %@, temperatureMin: %@, windForce: %@, windDeg: %@, condCodeNight: %@, pop: %@, pcpn: %@,", self.location, self.cnty, self.tz, self.adminArea, self.cityLon, self.cityLat, self.parentCity, self.condCodeDay, self.temperatureMax, self.hum, self.windSpeed, self.pres, self.vis, self.windDirection, self.condTxtDay, self.condTxtNight, self.currentTime, self.temperatureMin, self.windForce, self.windDeg, self.condCodeNight, self.pop, self.pcpn];
 }
