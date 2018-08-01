@@ -58,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		074D3DA42111E7D70070EE32 /* MNCHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNCHeader.h; sourceTree = "<group>"; };
 		07DA1EE4210087210052104D /* MNCWeatherPropertiesFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNCWeatherPropertiesFile.h; sourceTree = "<group>"; };
 		07DA1EE5210087210052104D /* MNCWeatherPropertiesFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MNCWeatherPropertiesFile.m; sourceTree = "<group>"; };
 		07DA1EE72100C36A0052104D /* MNCDetailWeatherData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNCDetailWeatherData.h; sourceTree = "<group>"; };
@@ -229,6 +230,7 @@
 				07E9346F20FD987C00667897 /* AppDelegate.h */,
 				07E9347020FD987C00667897 /* AppDelegate.m */,
 				07DA1F19210183F50052104D /* PrefixHeader.pch */,
+				074D3DA42111E7D70070EE32 /* MNCHeader.h */,
 			);
 			path = Support;
 			sourceTree = "<group>";
