@@ -45,23 +45,7 @@
 
 #define MNCTomorrowTag 1
 #define MNCAfterTomorrowTag 2
-#define kScreenW [UIScreen mainScreen].bounds.size.width
-#define kScreenH [UIScreen mainScreen].bounds.size.height
 
-
-
-#pragma mark - Lift cycle
-#pragma mark - Overridden methods
-#pragma mark - Public methods
-#pragma mark - Private methods
-#pragma mark - Notification
-#pragma mark - KVO
-#pragma mark - IBAction/ClickActions
-#pragma mark - protocol
-#pragma mark - UItextFieldDelegate
-#pragma mark - UItableViewDataSource
-#pragma mark - UItableViewDelegate
-#pragma mark - setter && getter
 // Include any system framework and library headers here that should be included in all compilation units.
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 
