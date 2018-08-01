@@ -20,7 +20,7 @@ static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
 @interface MNCWeatherViewController ()<MNCDetailViewControllerDelegate,UITextFieldDelegate>
 
 @property (strong, nonatomic) MNCWeatherPropertiesFile *propertiesFile;
-@property (strong, nonatomic) MNCWeatherManager *Message;
+@property (strong, nonatomic) MNCWeatherManager *message;
 @property (strong, nonatomic) MNCCityViewController *cityVC;
 @property (strong, nonatomic) MNCDetailWeatherViewController *detailVC;
 @property (strong, nonatomic) MNCDetailWeatherData *detailData;
@@ -46,7 +46,7 @@ static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
     [self createImageView];
     [self initWeatherClass];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updataSimpleUiData:)  name:@"MNCSimpleWeatherFromWebNotification"
+                                             selector:@selector(updataSimpleUIData:)  name:@"MNCSimpleWeatherFromWebNotification"
                                                object:nil];
     // Do any additional setup after loading the view.
 }
@@ -54,7 +54,7 @@ static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     NSLog(@"视图加载完成调用");
-    [self.Message useCityNameToRequestWeatherData:self.detailData.cityName];
+    [self.message useCityNameToRequestWeatherData:self.detailData.cityName];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -73,7 +73,7 @@ static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
 - (void)initWeatherClass {
     self.simpleView = [[MNCSimpleWeatherView alloc] init];
     self.propertiesFile = [[MNCWeatherPropertiesFile alloc] init];
-    self.Message = [MNCWeatherManager sharedInstance];
+    self.message = [MNCWeatherManager sharedInstance];
     self.cityVC = [[MNCCityViewController alloc] init];
     
     self.detailVC = [[MNCDetailWeatherViewController alloc] init];
@@ -106,7 +106,7 @@ static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
     [self.rightView addSubview:self.afterTomorrowView];
     [self.view addSubview:self.rightView];
     
-    [self updataWeatherbackgroundImage:self.detailData.condTxtDay];
+    [self updataWeatherbackgroundImage:self.detailData.conditionDay];
 }
 
 - (void)updataSubviewsFromShowLineImageView {
@@ -118,7 +118,7 @@ static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
 
 #pragma mark - Notification
 
-- (void)updataSimpleUiData:(NSNotification *)notification {
+- (void)updataSimpleUIData:(NSNotification *)notification {
     self.simpleData = notification.object;
     [self.tomorrowView createUIData:self.simpleData];
     [self.afterTomorrowView createUIData:self.simpleData];
@@ -131,7 +131,7 @@ static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
     if (!self.cityNameTextField.text) {
         return;
     }
-    [self.Message useCityNameToRequestWeatherData:self.cityNameTextField.text];
+    [self.message useCityNameToRequestWeatherData:self.cityNameTextField.text];
 }
 
 #pragma mark - protocol
@@ -184,11 +184,11 @@ static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
     return _propertiesFile;
 }
 
-- (MNCWeatherManager *)Message {
-    if (!_Message) {
-        _Message = [[MNCWeatherManager alloc] init];
+- (MNCWeatherManager *)message {
+    if (!_message) {
+        _message = [[MNCWeatherManager alloc] init];
     }
-    return  _Message;
+    return  _message;
 }
 
 - (MNCDetailWeatherViewController *)detailVC {

@@ -20,13 +20,13 @@
  白天天气状况
  */
 
-@property (strong, nonatomic) NSString *condTxtDay;
+@property (strong, nonatomic) NSString *conditionDay;
 
 /**
 晚间天气状况
  */
 
-@property (strong, nonatomic) NSString *condTxtNight;
+@property (strong, nonatomic) NSString *conditionNight;
 
 /**
  当天日期

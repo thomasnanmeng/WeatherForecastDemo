@@ -12,7 +12,7 @@
 @property (strong, nonatomic) NSString *cityLatitude;     //城市纬度
 @property (strong, nonatomic) NSString *cityLongitude;    //城市经度
 @property (strong, nonatomic) NSString *parentCity;       //该城市的上级城市
-@property (strong, nonatomic) NSString *administrative;   //所属行政区域
+@property (strong, nonatomic) NSString *administrationZone;   //所属行政区域
 @property (strong, nonatomic) NSString *country;          //城市所属国家名称
 @property (strong, nonatomic) NSString *cityTimeZone;     //城市所在时区
 @property (strong, nonatomic) NSString *windDirection;    //风向
@@ -21,7 +21,7 @@
 @property (strong, nonatomic) NSString *pressure;         //大气压强
 @property (strong, nonatomic) NSString *visibility;       //能见度
 
-@property (strong, nonatomic) MNCWeatherPropertiesFile *DataFile;
+@property (strong, nonatomic) MNCWeatherPropertiesFile *dataFile;
 @property (strong, nonatomic) MNCDetailWeatherData *detailData;
 @end
 
@@ -33,7 +33,7 @@
 {
     self = [super init];
     if (self) {
-        _DataFile = [[MNCWeatherPropertiesFile alloc] init];
+        _dataFile = [[MNCWeatherPropertiesFile alloc] init];
     }
     return self;
 }
@@ -41,7 +41,7 @@
 #pragma mark - Overridden methods
 
 - (NSString *)description {
-    return [NSString stringWithFormat: @"location: %@, cnty: %@, tz: %@, adminArea: %@, cityLon: %@, cityLat: %@, parentCity: %@, temperatureMax: %@, hum: %@, windSpeed: %@, pres: %@, vis: %@, windDirection: %@, condTxtDay: %@, condTxtNight: %@, currentTime: %@, temperatureMin: %@, windForce: %@, windDeg: %@, pop: %@, pcpn: %@,", self.cityName, self.country, self.cityTimeZone, self.administrative, self.cityLongitude, self.cityLatitude, self.parentCity, self.temperatureMax, self.humidity, self.windSpeed, self.pressure, self.visibility, self.windDirection, self.condTxtDay, self.condTxtNight, self.date, self.temperatureMin, self.windForce];
+    return [NSString stringWithFormat: @"location: %@, cnty: %@, tz: %@, adminArea: %@, cityLon: %@, cityLat: %@, parentCity: %@, temperatureMax: %@, hum: %@, windSpeed: %@, pres: %@, vis: %@, windDirection: %@, condTxtDay: %@, condTxtNight: %@, currentTime: %@, temperatureMin: %@, windForce: %@", self.cityName, self.country, self.cityTimeZone, self.administrationZone, self.cityLongitude, self.cityLatitude, self.parentCity, self.temperatureMax, self.humidity, self.windSpeed, self.pressure, self.visibility, self.windDirection, self.conditionDay, self.conditionNight, self.date, self.temperatureMin, self.windForce];
 }
 
 #pragma mark - Public methods
@@ -65,7 +65,7 @@
         self.cityName = propertiesArray[0];
         self.cityName = propertiesArray[1];
         self.cityTimeZone = propertiesArray[2];
-        self.administrative = propertiesArray[3];
+        self.administrationZone = propertiesArray[3];
         self.cityLongitude = propertiesArray[4];
         self.cityLatitude = propertiesArray[5];
         self.parentCity = propertiesArray[6];
@@ -82,8 +82,8 @@
         self.pressure = propertiesArray[6];
         self.visibility = propertiesArray[8];
         self.windDirection = propertiesArray[9];
-        self.condTxtDay = propertiesArray[10];
-        self.condTxtNight = propertiesArray[11];
+        self.conditionDay = propertiesArray[10];
+        self.conditionNight = propertiesArray[11];
         self.date = propertiesArray[12];
         self.temperatureMin = propertiesArray[15];
         self.windForce = propertiesArray[16];
@@ -92,17 +92,17 @@
 
 - (void)initDetailWeatherPropertiesFromPlist {
     //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
-    if (![self.DataFile.dataArray count]) {
-        self.DataFile = [[MNCWeatherPropertiesFile alloc] init];
+    if (![self.dataFile.dataArray count]) {
+        self.dataFile = [[MNCWeatherPropertiesFile alloc] init];
     }
-    NSMutableDictionary *dic = [self.weatherDataFile.dataArray objectAtIndex:0];
+    NSMutableDictionary *dic = [self.dataFile.dataArray objectAtIndex:0];
     for (NSString *weatherProperty in [dic allKeys]) {
         if ([weatherProperty isEqualToString:@"admin_area"]) {
-            self.administrative = [dic objectForKey:weatherProperty];
+            self.administrationZone = [dic objectForKey:weatherProperty];
         } else if ([weatherProperty isEqualToString:@"cond_txt_d"]) {
-            self.condTxtDay = [dic objectForKey:weatherProperty];
+            self.conditionDay = [dic objectForKey:weatherProperty];
         } else if ([weatherProperty isEqualToString:@"cond_txt_n"]) {
-            self.condTxtNight = [dic objectForKey:weatherProperty];
+            self.conditionNight = [dic objectForKey:weatherProperty];
         } else if ([weatherProperty isEqualToString:@"date"]) {
             self.date = [dic objectForKey:weatherProperty];
         } else if ([weatherProperty isEqualToString:@"wind_sc"]) {

@@ -50,48 +50,48 @@
     cityNameLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:cityNameLabel];
     
-    UILabel *temperatureLab = [[UILabel alloc] initWithFrame:
+    UILabel *temperatureLabel = [[UILabel alloc] initWithFrame:
                             CGRectMake(rect.origin.x + 100,
                                        rect.origin.y + 70,
                                        (rect.size.width - 200) / 2 + 100,
                                        rect.size.height / 6)];
-    temperatureLab.tag = 101;
-    temperatureLab.font = [UIFont fontWithName:@"Arial" size:40];
-    temperatureLab.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:temperatureLab];
+    temperatureLabel.tag = 101;
+    temperatureLabel.font = [UIFont fontWithName:@"Arial" size:40];
+    temperatureLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:temperatureLabel];
     
-    UILabel *moreElementLab = [[UILabel alloc] initWithFrame:
+    UILabel *moreElementLabel = [[UILabel alloc] initWithFrame:
                                        CGRectMake(rect.origin.x,
-                                                  rect.origin.y + 30 + temperatureLab.bounds.size.height,
+                                                  rect.origin.y + 30 + temperatureLabel.bounds.size.height,
                                                   rect.size.width + 30,
                                                   50)];
-    moreElementLab.font = [UIFont fontWithName:@"Arial" size:17];
-    moreElementLab.textAlignment = NSTextAlignmentCenter;
-    moreElementLab.tag = 102;
-    [self.view addSubview:moreElementLab];
+    moreElementLabel.font = [UIFont fontWithName:@"Arial" size:17];
+    moreElementLabel.textAlignment = NSTextAlignmentCenter;
+    moreElementLabel.tag = 102;
+    [self.view addSubview:moreElementLabel];
 }
 
 - (void)createUIData {
-    NSString *cityname = self.detailWeatherData.cityName;
-    NSString *temperatureMax = self.detailWeatherData.temperatureMax;
-    NSString *temperatureMin = self.detailWeatherData.temperatureMin;
-    NSString *humidity = self.detailWeatherData.humidity;
-    NSString *State = self.detailWeatherData.humidity;
-    NSString *WindForce = self.detailWeatherData.windForce;
+    NSString *cityName = self.detailData.cityName;
+    NSString *temperatureMax = self.detailData.temperatureMax;
+    NSString *temperatureMin = self.detailData.temperatureMin;
+    NSString *humidity = self.detailData.humidity;
+    NSString *state = self.detailData.humidity;
+    NSString *windForce = self.detailData.windForce;
     
-    UILabel *cityNameLab = (UILabel *)[self.view viewWithTag:100];
-    cityNameLab.text = [NSString stringWithFormat:@"%@",[self pinYinToChinese:cityname]];
+    UILabel *cityNameLabel = (UILabel *)[self.view viewWithTag:100];
+    cityNameLabel.text = [NSString stringWithFormat:@"%@",[self pinYinToChinese:cityName]];
     
-    UILabel *tempMaxLab = (UILabel *)[self.view viewWithTag:101];
-    tempMaxLab.text = [NSString stringWithFormat:@"%d℃",(([temperatureMax intValue] - 32) * 5 / 9)];
+    UILabel *tempMaxLabel = (UILabel *)[self.view viewWithTag:101];
+    tempMaxLabel.text = [NSString stringWithFormat:@"%d℃",(([temperatureMax intValue] - 32) * 5 / 9)];
     
-    UILabel *moreElementLab = (UILabel *)[self.view viewWithTag:102];
-    moreElementLab.text = [NSString stringWithFormat:@"温度:%d/%d℃  湿度:%@ 风力:%@ %@",
+    UILabel *moreElementLabel = (UILabel *)[self.view viewWithTag:102];
+    moreElementLabel.text = [NSString stringWithFormat:@"温度:%d/%d℃  湿度:%@ 风力:%@ %@",
                                    (([temperatureMax intValue] - 32) * 5 / 9),
                                    (([temperatureMin intValue] - 32) * 5 / 9),
                                    humidity,
-                                   WindForce,
-                                   State];
+                                   windForce,
+                                   state];
 }
 
 - (NSString *)pinYinToChinese:(NSString *)pinYin {

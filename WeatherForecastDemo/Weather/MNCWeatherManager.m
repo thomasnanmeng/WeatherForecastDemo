@@ -15,7 +15,7 @@
 @property (strong, nonatomic) NSMutableDictionary *todayData;
 @property (strong, nonatomic) NSMutableDictionary *tomorrowData;
 @property (strong, nonatomic) NSMutableDictionary *afterTomorrowData;
-@property (strong, nonatomic) NSMutableArray *DateArray;
+@property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) MNCDetailWeatherData *detailData;
 @property (strong, nonatomic) MNCSimpleWeatherData *simpleData;
 @end
@@ -45,9 +45,9 @@
 #pragma mark - Public methods
 
 - (void)useCityNameToRequestWeatherData:(NSString *)cityName {
-    NSString *strUrl = [NSString stringWithFormat:@"https://free-api.heweather.com/s6/weather/forecast?location=%@&key=cbd779e2141b45938d845a2a8cb2345c&lang=en&unit=i",cityName];
-    strUrl = [strUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString:strUrl]];
+    NSString *strURL = [NSString stringWithFormat:@"https://free-api.heweather.com/s6/weather/forecast?location=%@&key=cbd779e2141b45938d845a2a8cb2345c&lang=en&unit=i",cityName];
+    strURL = [strURL stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString:strURL]];
     NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest: request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error != nil) {
             NSLog(@"%@", error);

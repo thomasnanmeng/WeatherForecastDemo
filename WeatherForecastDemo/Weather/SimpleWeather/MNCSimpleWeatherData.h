@@ -26,19 +26,19 @@
  白天天气状况
  */
 
-@property (strong, nonatomic) NSString *condTxtDay;
+@property (strong, nonatomic) NSString *conditionDay;
 
 /**
  晚间天气状况
  */
 
-@property (strong, nonatomic) NSString *condTxtNight;
+@property (strong, nonatomic) NSString *conditionNight;
 
 /**
  天气日期
  */
 
-@property (strong, nonatomic) NSString *Date;
+@property (strong, nonatomic) NSString *date;
 
 /**
  获取从天气API拉下来的数据，并保存到当前类的全局属性中
