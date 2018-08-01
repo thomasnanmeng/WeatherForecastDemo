@@ -10,31 +10,59 @@
 
 @interface MNCDetailWeatherData : NSObject
 
-@property (nonatomic, strong) NSString *location;   //城市名称
+/**
+ 城市名称
+ */
 
-@property (nonatomic, strong) NSString *condCodeDay;     //白天天气状况代码
-@property (nonatomic, strong) NSString *condCodeNight;   //晚间天气状况代码
-@property (nonatomic, strong) NSString *condTxtDay;      //白天天气状况描述
-@property (nonatomic, strong) NSString *condTxtNight;    //晚间天气状况描述
-@property (nonatomic, strong) NSString *currentTime;     //时间
-@property (nonatomic, strong) NSString *windForce;       //风力
-@property (nonatomic, strong) NSString *temperatureMax;  //最高温度
-@property (nonatomic, strong) NSString *temperatureMin;  //最低温度
-@property (nonatomic, strong) NSString *hum;             //相对湿度
+@property (strong, nonatomic) NSString *cityName;
 
+/**
+ 白天天气状况
+ */
+
+@property (strong, nonatomic) NSString *condTxtDay;
+
+/**
+晚间天气状况
+ */
+
+@property (strong, nonatomic) NSString *condTxtNight;
+
+/**
+ 当天日期
+ */
+
+@property (strong, nonatomic) NSString *date;
+
+/**
+ 风力
+ */
+
+@property (strong, nonatomic) NSString *windForce;
+
+/**
+ 最高温度
+ */
+
+@property (strong, nonatomic) NSString *temperatureMax;
+
+/**
+ 最低温度
+ */
+
+@property (strong, nonatomic) NSString *temperatureMin;
+
+/**
+ 相对湿度
+ */
+
+@property (strong, nonatomic) NSString *hum;
+
+/**
+ 获取从天气API拉下来的数据，并保存到当前类的全局属性中
+ 参数说明 : propretiesDic 拉取到的当天天气数据
+          flag 判断是basicData or todayData
+ */
 - (void)initDetailWeatherPropertiesFromDic:(NSDictionary *)propretiesDic info:(NSString *)flag;
-
-//温度
-- (NSString *)updataTempMax;
-- (NSString *)updataTempMin;
-//湿度
-- (NSString *)updataHum;
-//晴雨
-- (NSString *)updataState;
-//风力
-- (NSString *)updataWindForce;
-//城市
-- (NSString *)updataCity;
-- (NSString *)updataCurrentDate;
 
 @end

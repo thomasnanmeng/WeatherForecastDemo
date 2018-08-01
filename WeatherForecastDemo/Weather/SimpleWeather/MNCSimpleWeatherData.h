@@ -11,30 +11,48 @@
 @interface MNCSimpleWeatherData : NSObject
 
 /**
-最高温度
+ 最高温度
  */
-@property (nonatomic, strong) NSString *TmpMax;
+
+@property (strong, nonatomic) NSString *tmpMax;
+
 /**
  最低温度
  */
-@property (nonatomic, strong) NSString *TmpMin;
+
+@property (strong, nonatomic) NSString *TmpMin;
+
 /**
  白天天气状况
  */
-@property (nonatomic, strong) NSString *conditionsDay;
+
+@property (strong, nonatomic) NSString *conditionsDay;
+
 /**
  晚间天气状况
  */
-@property (nonatomic, strong) NSString *conditionsNight;
-/**
- 当天天气日期
- */
-@property (nonatomic, strong) NSString *Date;
 
+@property (strong, nonatomic) NSString *conditionsNight;
+
+/**
+ 天气日期
+ */
+
+@property (strong, nonatomic) NSString *Date;
+
+/**
+ 获取从天气API拉下来的数据，并保存到当前类的全局属性中
+ 参数说明 : propretiesDic 拉取到的当天天气数据
+ */
 
 - (void)initSimpleWeatherPropertiesFromDic:(NSDictionary *)propretiesDic;
 
-- (void)initWeatherPropertiesFromPlist:(NSUInteger)index;
+/**
+ 获取plist文件中保存的数据，并保存到当前类的全局属性中
+ 参数说明 : simpleData tomorrowData or afterTomorrowData
+ */
+
+- (void)initWeatherPropertiesFromPlist:(MNCSimpleWeatherData *)simpleData;
 
 
 @end

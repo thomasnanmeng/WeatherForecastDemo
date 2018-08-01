@@ -15,9 +15,7 @@
 @property (strong, nonatomic) NSDictionary *todaydataDic;
 @property (strong, nonatomic) NSDictionary *tomorrowDataDic;
 @property (strong, nonatomic) NSDictionary *afterTomorrowDataDic;
-
 @property (strong, nonatomic) NSMutableArray *weatherDateArray;
-
 @property (strong, nonatomic) MNCDetailWeatherData *detailWeatherData;
 @property (strong, nonatomic) MNCSimpleWeatherData *simpleWeatherData;
 @end
@@ -25,6 +23,7 @@
 @implementation MNCWeatherManager
 
 #pragma mark - Lift cycle
+
 + (MNCWeatherManager *)sharedInstance {
     static MNCWeatherManager *instance = nil;
     static dispatch_once_t onceToken;
@@ -42,7 +41,9 @@
     }
     return self;
 }
+
 #pragma mark - Public methods
+
 - (void)useCityNameToRequestWeatherData:(NSString *)cityName {
     NSString *strUrl = [NSString stringWithFormat:@"https://free-api.heweather.com/s6/weather/forecast?location=%@&key=cbd779e2141b45938d845a2a8cb2345c&lang=en&unit=i",cityName];
     //创建URL时，如果是中文则不能请求，必须转换
@@ -61,7 +62,9 @@
     }];
     [dataTask resume];
 }
+
 #pragma mark - Private methods
+
 - (void)JsonStringToDicString:(NSString *)jsonString {
     if (!jsonString) {
         return ;
@@ -130,6 +133,7 @@
 }
 
 #pragma mark - setter && getter
+
 - (MNCDetailWeatherData *)detailWeatherData {
     if (!_detailWeatherData) {
         _detailWeatherData = [[MNCDetailWeatherData alloc] init];

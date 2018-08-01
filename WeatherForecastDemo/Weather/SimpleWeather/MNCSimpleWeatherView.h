@@ -14,9 +14,21 @@
 @interface MNCSimpleWeatherView : UIView
 
 /**
- 
+ 数据模型 tomorrowData or afterTomorrowData 的对象
  */
-@property (nonatomic, strong) MNCSimpleWeatherData *simpleWeatherData;
-- (void)createUIData:(NSUInteger)index;
+@property (strong, nonatomic) MNCSimpleWeatherData *simpleWeatherData;
 
+/**
+ 更新数据
+ 参数说明: simpleData 一个类对象，可以为明天数据或者后天数据
+ */
+
+- (void)createUIData:(MNCSimpleWeatherData *)simpleData;
+
+/**
+ 返回参数对象的天气状况
+ 参数说明: simpleData 一个类对象，可以为明天数据或者后天数据
+ */
+
+- (NSString *)updataWeatherStata:(MNCSimpleWeatherData *)simpleData;
 @end

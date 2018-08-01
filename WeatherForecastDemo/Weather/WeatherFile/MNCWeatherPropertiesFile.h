@@ -8,13 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-
-
-
 @interface MNCWeatherPropertiesFile : NSObject
 
-@property (nonatomic, strong) NSArray *weatherPropertiesInFiled;
-- (void)changeWeatherPropertiesToFiled:(NSDictionary *)weatherProperty;
+/**
+ 存储文件中数据的全局变量
+ */
 
+@property (strong, nonatomic) NSArray *dataArray;
 
 @end

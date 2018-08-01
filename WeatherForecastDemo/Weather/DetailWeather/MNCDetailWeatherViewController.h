@@ -11,13 +11,19 @@
 @protocol MNCDetailViewControllerDelegate <NSObject>
 
 /**
- 
+ 利用传入的天气状况参数更新MNCWeatherViewController类的背景图片
+ 参数说明: stata   当天的天气状况
  */
-- (void)updataDetailWeatherbackgroundImage:(NSString *)stata;
 
+- (void)updataWeatherbackgroundImage:(NSString *)stata;
 @end
 
 @interface MNCDetailWeatherViewController : UIViewController
-@property (nonatomic, assign) id <MNCDetailViewControllerDelegate> delegate;
+
+/**
+ 协议
+ */
+
+@property (weak, nonatomic) id <MNCDetailViewControllerDelegate> delegate;
 
 @end

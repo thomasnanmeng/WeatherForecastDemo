@@ -9,17 +9,16 @@
 #import "MNCCityViewController.h"
 #import "MNCCityNameGroup.h"
 
-//plist中保存的三个Key值
-NSString * const kCityNameCKey = @"cityNameC";
+//CityGroup.plist文件中保存的Key键
+static NSString * const kCityNameCKey = @"cityNameC";
 
 @interface MNCCityViewController () <UITableViewDelegate,UITableViewDataSource>
-
-@property (nonatomic, strong) MNCCityNameGroup *cityNameGroup;
+@property (strong, nonatomic) MNCCityNameGroup *cityNameGroup;
 @property (weak, nonatomic) IBOutlet UITableView *cityTable;
-
 @end
 
 @implementation MNCCityViewController
+
 #pragma mark - Lift cycle
 
 - (void)viewDidLoad {
@@ -37,6 +36,7 @@ NSString * const kCityNameCKey = @"cityNameC";
 
 
 #pragma mark - UItableViewDataSource
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return  0;
 }
@@ -49,7 +49,9 @@ NSString * const kCityNameCKey = @"cityNameC";
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
     
 }
+
 #pragma mark - UItableViewDelegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
 }

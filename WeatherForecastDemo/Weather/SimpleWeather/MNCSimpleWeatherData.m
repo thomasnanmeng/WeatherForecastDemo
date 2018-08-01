@@ -11,13 +11,12 @@
 
 @interface MNCSimpleWeatherData ()
 @property (strong, nonatomic) MNCWeatherPropertiesFile *weatherDataFile;
-
 @end
 
 @implementation MNCSimpleWeatherData
 
-
 #pragma mark - Lift cycle
+
 - (instancetype)init
 {
     self = [super init];
@@ -29,10 +28,11 @@
 }
 
 #pragma mark - Public methods
+
 - (void)initSimpleWeatherPropertiesFromDic:(NSDictionary *)propretiesDic {
     if ([propretiesDic count]) {
         NSArray *propertiesArray = [propretiesDic allValues];
-        self.simpleTmpMax = propertiesArray[2];
+        self.TmpMax = propertiesArray[2];
         self.simpleTmpMin = propertiesArray[15];
         self.simpleCondTextDay = propertiesArray[10];
         self.simpleCondTextNight = propertiesArray[11];
@@ -49,13 +49,14 @@
     }
     return self.simpleWeatherTmpMax;
 }
+
 - (NSString *)updataTmpMinData:(NSUInteger)index {
     if (!self.simpleWeatherTmpMin) {
         [self initWeatherPropertiesFromPlist:index];
     }
     return self.simpleWeatherTmpMin;
 }
-//晴雨
+
 - (NSString *)updataWeatherState:(NSUInteger)index {
     if (!self.simpleWeatherCondTextDay) {
         [self initWeatherPropertiesFromPlist:index];
@@ -70,6 +71,7 @@
 }
 
 #pragma mark - Private methods
+
 - (void)initWeatherPropertiesFromPlist:(NSUInteger) index {
     //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
     if (![self.weatherDataFile.weatherPropertiesInFiled count]) {
@@ -90,6 +92,5 @@
         }
     }
 }
-
 
 @end

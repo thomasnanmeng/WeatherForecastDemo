@@ -12,11 +12,13 @@
 #import "MNCWeatherViewController.h"
 
 @interface MNCSimpleWeatherView ()
-@property (nonatomic, strong) MNCWeatherViewController *weatherViewController;
+@property (strong, nonatomic) MNCWeatherViewController *weatherViewController;
 @end
 
 @implementation MNCSimpleWeatherView
+
 #pragma mark - Lift cycle
+
 - (instancetype)init
 {
     self = [super init];
@@ -25,12 +27,13 @@
     [self createUI];
     return self;
 }
+
 #pragma mark - Public methods
-- (void)createUIData:(NSUInteger)index {
+
+- (void)createUIData:(MNCSimpleWeatherData *)simpleData {
     
-    NSString *tmpMax = [self.simpleWeatherData updataTmpMaxData:index];
-    NSString *tmpMin = [self.simpleWeatherData updataTmpMinData:index];
-    NSString *condStata = [self.simpleWeatherData updataWeatherState:index];
+    NSString *tmpMax = simpleData.tmpMax;
+    NSString *tmpMin = simpleData.TmpMin;
     
     UILabel *tmpLab = (UILabel *)[self viewWithTag:101];
     tmpLab.text = [NSString stringWithFormat:@"%d/%d℃",([tmpMax intValue] - 32) * 5 / 9,
@@ -52,6 +55,11 @@
     }
     [self.weatherViewController.simpleRightView addSubview:self];
 }
+
+- (NSString *)updataWeatherStata:(MNCSimpleWeatherData *)simpleData {
+    return simpleData.conditionsDay;
+}
+
 #pragma mark - Private methods
 - (void)createUI {
     //    UILabel *dateLab = [[UILabel alloc] initWithFrame:
@@ -159,7 +167,9 @@
     
     return image;
 }
+
 #pragma mark setter && getter
+
 - (MNCSimpleWeatherData *)simpleWeatherData {
     if (!_simpleWeatherData) {
         _simpleWeatherData = [[MNCSimpleWeatherData alloc] init];

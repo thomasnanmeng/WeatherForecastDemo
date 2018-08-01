@@ -18,24 +18,25 @@
 
 @interface MNCWeatherViewController ()<MNCDetailViewControllerDelegate,UITextFieldDelegate>
 
-@property (nonatomic, strong) MNCWeatherPropertiesFile *weatherPropertiesFile;
-@property (nonatomic, strong) MNCWeatherManager *weatherMessage;
-@property (nonatomic, strong) MNCCityViewController *cityViewController;
-@property (nonatomic, strong) MNCDetailWeatherViewController *detailWeatherViewController;
-@property (nonatomic, strong) MNCDetailWeatherData *detailWeatherData;
-@property (nonatomic, strong) MNCSimpleWeatherData *simpleWeatherData;
-@property (nonatomic, strong) MNCSimpleWeatherView *simpleWeatherView;
-@property (nonatomic, strong) MNCSimpleWeatherView *tomorrowView;
-@property (nonatomic, strong) MNCSimpleWeatherView *afterTomorrowView;
+@property (strong, nonatomic) MNCWeatherPropertiesFile *weatherPropertiesFile;
+@property (strong, nonatomic) MNCWeatherManager *weatherMessage;
+@property (strong, nonatomic) MNCCityViewController *cityViewController;
+@property (strong, nonatomic) MNCDetailWeatherViewController *detailWeatherViewController;
+@property (strong, nonatomic) MNCDetailWeatherData *detailWeatherData;
+@property (strong, nonatomic) MNCSimpleWeatherData *simpleWeatherData;
+@property (strong, nonatomic) MNCSimpleWeatherView *simpleWeatherView;
+@property (strong, nonatomic) MNCSimpleWeatherView *tomorrowView;
+@property (strong, nonatomic) MNCSimpleWeatherView *afterTomorrowView;
+@property (strong, nonatomic) UIView *leftView;
+@property (strong, nonatomic) UIView *rightView;
 @property (weak, nonatomic) IBOutlet UITextField *cityNameTextFIeld;
-@property (nonatomic, strong) UIImageView *imageView;
-
-
+@property (strong, nonatomic) UIImageView *imageView;
 @end
 
 @implementation MNCWeatherViewController
 
 #pragma mark - Lift cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.cityNameTextFIeld.delegate = self;
@@ -59,6 +60,7 @@
 }
 
 #pragma mark - Private methods
+
 - (void)initImageView {
     self.imageView = [[UIImageView alloc] init];
     self.imageView.frame = CGRectMake(0, 0, kScreenW, kScreenH);
@@ -83,35 +85,36 @@
     
     self.tomorrowView = [[MNCSimpleWeatherView alloc] init];
     self.tomorrowView.frame = CGRectMake(0, 0, 200, 120);
-    self.simpleLeftView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
-                                                                   kScreenH * 3 / 4,
-                                                                   kScreenW / 2,
-                                                                   kScreenH / 4)];
+    self.leftView = [[UIView alloc] initWithFrame:CGRectMake(self.view.bounds.origin.x,
+                                                            kScreenH * 3 / 4,
+                                                            kScreenW / 2,
+                                                            kScreenH / 4)];
     [self.tomorrowView createUIData:MNCTomorrowTag];
-    [self.simpleLeftView addSubview:self.tomorrowView];
-    [self.view addSubview:self.simpleLeftView];
+    [self.leftView addSubview:self.tomorrowView];
+    [self.view addSubview:self.leftView];
     
     self.afterTomorrowView = [[MNCSimpleWeatherView alloc] init];
     self.afterTomorrowView.frame = CGRectMake(0, 0, 200, 120);
-    self.simpleRightView = [[UIView alloc] initWithFrame:CGRectMake(kScreenW / 2,
-                                                                    kScreenH * 3 / 4,
-                                                                    kScreenW / 2,
-                                                                    kScreenH / 4)];
+    self.rightView = [[UIView alloc] initWithFrame:CGRectMake(kScreenW / 2,
+                                                            kScreenH * 3 / 4,
+                                                            kScreenW / 2,
+                                                            kScreenH / 4)];
     [self.afterTomorrowView createUIData:MNCAfterTomorrowTag];
-    [self.simpleRightView addSubview:self.afterTomorrowView];
-    [self.view addSubview:self.simpleRightView];
+    [self.rightView addSubview:self.afterTomorrowView];
+    [self.view addSubview:self.rightView];
     
-    [self updataDetailWeatherbackgroundImage:[self.detailWeatherData updataState]];
+    [self updataWeatherbackgroundImage:[self.detailWeatherData updataState]];
 }
 
 - (void)updataSubviewsFromShowLineImageView {
-    [self.simpleRightView.subviews makeObjectsPerformSelector:
+    [self.leftView.subviews makeObjectsPerformSelector:
      @selector(removeFromSuperview)];
-    [self.simpleLeftView.subviews makeObjectsPerformSelector:
+    [self.rightView.subviews makeObjectsPerformSelector:
      @selector(removeFromSuperview)];
 }
 
 #pragma mark - Notification
+
 - (void)updataSimpleUiData:(NSNotification *)notification {
     self.simpleWeatherData = notification.object;
     [self.tomorrowView createUIData:MNCTomorrowTag];
@@ -120,6 +123,7 @@
 }
 
 #pragma mark - IBAction/ClickActions
+
 - (IBAction)selectWeatherFromCityAction:(id)sender {
     if (!self.cityNameTextFIeld.text) {
         return;
@@ -128,7 +132,8 @@
 }
 
 #pragma mark - protocol
-- (void)updataDetailWeatherbackgroundImage:(NSString *)stata {
+
+- (void)updataWeatherbackgroundImage:(NSString *)stata {
     UIImage *image = nil;
     if ([stata isEqualToString:@"Cloudy"]) {//多云
         image = [UIImage imageNamed:@"partlyCloudy.jpg"];
@@ -159,6 +164,7 @@
 }
 
 #pragma mark - UItextFieldDelegate
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     //
 }
@@ -167,6 +173,7 @@
     //
 }
 #pragma mark - setter && getter
+
 - (MNCWeatherPropertiesFile *)weatherPropertiesFile {
     if (!_weatherPropertiesFile) {
         _weatherPropertiesFile = [[MNCWeatherPropertiesFile alloc] init];

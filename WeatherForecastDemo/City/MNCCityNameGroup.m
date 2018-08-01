@@ -9,13 +9,14 @@
 #import "MNCCityNameGroup.h"
 @interface MNCCityNameGroup ()
 
-@property (nonatomic, strong) NSArray *cityNameArray;
+@property (strong, nonatomic) NSArray *Array;
 
 @end
 
 @implementation MNCCityNameGroup
 
 #pragma mark - Lift cycle
+
 - (instancetype)init
 {
     self = [super init];
@@ -26,6 +27,7 @@
 }
 
 #pragma mark - Private methods
+
 - (void)initCityNameGroup {
     NSString *dir = [self getSaveFiledDir];
     NSString *path = [self getSaveFileName];
@@ -34,16 +36,15 @@
                                                attributes: nil error: nil];
     
     if ([[NSFileManager defaultManager] fileExistsAtPath: path]) {
-        _cityNameArray = [NSMutableArray arrayWithContentsOfFile: path];
+        _Array = [NSMutableArray arrayWithContentsOfFile: path];
     } else {
         NSString *initPath = [[NSBundle mainBundle] pathForResource: @"CityGroup"
                                                              ofType: @"plist"];
-        _cityNameArray = [NSMutableArray arrayWithContentsOfFile: initPath];
-        [_cityNameArray writeToFile: path atomically: YES];
+        _Array = [NSMutableArray arrayWithContentsOfFile: initPath];
+        [_Array writeToFile: path atomically: YES];
     }
-    _cityNameArray = [NSMutableArray arrayWithContentsOfFile: path];
+    _Array = [NSMutableArray arrayWithContentsOfFile: path];
 }
-
 
 - (NSString *)getSaveFiledDir {
     //常用的沙盒路径

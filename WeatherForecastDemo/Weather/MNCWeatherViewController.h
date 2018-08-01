@@ -10,8 +10,4 @@
 
 @interface MNCWeatherViewController : UIViewController 
 
-
-@property (strong, nonatomic) UIView *simpleLeftView;
-@property (strong, nonatomic) UIView *simpleRightView;
-
 @end

@@ -10,13 +10,15 @@
 #import "MNCDetailWeatherData.h"
 
 @interface MNCDetailWeatherViewController ()
-@property (nonatomic, strong) MNCDetailWeatherData *detailWeatherData;
-@property (nonatomic, strong) UIImageView *imageView;
+@property (strong, nonatomic) MNCDetailWeatherData *detailWeatherData;
+@property (strong, nonatomic) UIImageView *imageView;
 
 @end
 
 @implementation MNCDetailWeatherViewController
+
 #pragma mark - Lift cycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self createUI];
@@ -33,7 +35,9 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 #pragma mark - Private methods
+
 - (void)createUI {
     CGRect rect= self.view.bounds;
     UILabel *cityName = [[UILabel alloc] initWithFrame:
@@ -117,14 +121,7 @@
     }
 }
 
-
-
-
-
-
 #pragma mark - Notification
-
-
 
 - (void)updataDetailUIData {
     [self createUIData];
@@ -132,22 +129,20 @@
 
 - (void)updataDetailWeatherUIData:(NSNotification *)notification {
     self.detailWeatherData = notification.object;
-    [_delegate updataDetailWeatherbackgroundImage:[self.detailWeatherData updataState]];
+    [_delegate updataWeatherbackgroundImage:[self.detailWeatherData updataState]];
     [self updataDetailUIData];
     NSLog(@"更新Detail数据");
 }
+
 - (void)removeNotificationAction {
-    //移除指定的通知，不然会造成内存泄露
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:@"kMarketPlateUpdataNotification"
                                                   object:nil];
-    //移除viewController中所有通知
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-
-
 #pragma mark - setter && getter
+
 - (MNCDetailWeatherData *)detailWeatherData {
     if (!_detailWeatherData) {
         _detailWeatherData = [[MNCDetailWeatherData alloc] init];
@@ -157,7 +152,6 @@
 
 #pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
