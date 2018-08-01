@@ -14,25 +14,25 @@
  最高温度
  */
 
-@property (strong, nonatomic) NSString *tmpMax;
+@property (strong, nonatomic) NSString *temperatureMax;
 
 /**
  最低温度
  */
 
-@property (strong, nonatomic) NSString *TmpMin;
+@property (strong, nonatomic) NSString *temperatureMin;
 
 /**
  白天天气状况
  */
 
-@property (strong, nonatomic) NSString *conditionsDay;
+@property (strong, nonatomic) NSString *condTxtDay;
 
 /**
  晚间天气状况
  */
 
-@property (strong, nonatomic) NSString *conditionsNight;
+@property (strong, nonatomic) NSString *condTxtNight;
 
 /**
  天气日期

@@ -7,30 +7,33 @@
 //
 
 #import "MNCWeatherViewController.h"
-#import "MNCDetailWeatherViewController.h"
 #import "MNCCityViewController.h"
 #import "MNCWeatherManager.h"
+#import "MNCDetailWeatherViewController.h"
 #import "MNCDetailWeatherData.h"
 #import "MNCSimpleWeatherData.h"
 #import "MNCWeatherPropertiesFile.h"
 #import "MNCSimpleWeatherView.h"
 
+static NSString * const  MNCSimpleWeatherFromWebNotification = @"cityNameC";
 
 @interface MNCWeatherViewController ()<MNCDetailViewControllerDelegate,UITextFieldDelegate>
 
-@property (strong, nonatomic) MNCWeatherPropertiesFile *weatherPropertiesFile;
-@property (strong, nonatomic) MNCWeatherManager *weatherMessage;
-@property (strong, nonatomic) MNCCityViewController *cityViewController;
-@property (strong, nonatomic) MNCDetailWeatherViewController *detailWeatherViewController;
-@property (strong, nonatomic) MNCDetailWeatherData *detailWeatherData;
-@property (strong, nonatomic) MNCSimpleWeatherData *simpleWeatherData;
-@property (strong, nonatomic) MNCSimpleWeatherView *simpleWeatherView;
+@property (strong, nonatomic) MNCWeatherPropertiesFile *propertiesFile;
+@property (strong, nonatomic) MNCWeatherManager *Message;
+@property (strong, nonatomic) MNCCityViewController *cityVC;
+@property (strong, nonatomic) MNCDetailWeatherViewController *detailVC;
+@property (strong, nonatomic) MNCDetailWeatherData *detailData;
+@property (strong, nonatomic) MNCSimpleWeatherData *simpleData;
+@property (strong, nonatomic) MNCSimpleWeatherView *simpleView;
 @property (strong, nonatomic) MNCSimpleWeatherView *tomorrowView;
 @property (strong, nonatomic) MNCSimpleWeatherView *afterTomorrowView;
+@property (weak  , nonatomic) IBOutlet UITextField *cityNameTextField;
+@property (strong, nonatomic) UIImageView *backgroundImageView;
 @property (strong, nonatomic) UIView *leftView;
 @property (strong, nonatomic) UIView *rightView;
-@property (weak, nonatomic) IBOutlet UITextField *cityNameTextFIeld;
-@property (strong, nonatomic) UIImageView *imageView;
+
+
 @end
 
 @implementation MNCWeatherViewController
@@ -39,11 +42,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.cityNameTextFIeld.delegate = self;
-    [self initImageView];
+    self.cityNameTextField.delegate = self;
+    [self createImageView];
     [self initWeatherClass];
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updataSimpleUiData:) name:@"MNCSimpleWeatherFromWebNotification"
+                                             selector:@selector(updataSimpleUiData:)  name:@"MNCSimpleWeatherFromWebNotification"
                                                object:nil];
     // Do any additional setup after loading the view.
 }
@@ -51,7 +54,7 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     NSLog(@"视图加载完成调用");
-    [self.weatherMessage useCityNameToRequestWeatherData:[self.detailWeatherData updataCity]];
+    [self.Message useCityNameToRequestWeatherData:self.detailData.cityName];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -61,27 +64,27 @@
 
 #pragma mark - Private methods
 
-- (void)initImageView {
-    self.imageView = [[UIImageView alloc] init];
-    self.imageView.frame = CGRectMake(0, 0, kScreenW, kScreenH);
-    [self.view addSubview:self.imageView];
+- (void)createImageView {
+    self.backgroundImageView = [[UIImageView alloc] init];
+    self.backgroundImageView.frame = CGRectMake(0, 0, kScreenW, kScreenH);
+    [self.view addSubview:self.backgroundImageView];
 }
 
 - (void)initWeatherClass {
-    self.simpleWeatherView = [[MNCSimpleWeatherView alloc] init];
-    self.weatherPropertiesFile = [[MNCWeatherPropertiesFile alloc] init];
-    self.weatherMessage = [MNCWeatherManager sharedInstance];
-    self.cityViewController = [[MNCCityViewController alloc] init];
+    self.simpleView = [[MNCSimpleWeatherView alloc] init];
+    self.propertiesFile = [[MNCWeatherPropertiesFile alloc] init];
+    self.Message = [MNCWeatherManager sharedInstance];
+    self.cityVC = [[MNCCityViewController alloc] init];
     
-    self.detailWeatherViewController = [[MNCDetailWeatherViewController alloc] init];
-    [self addChildViewController:self.detailWeatherViewController];
-    self.detailWeatherViewController.delegate = self;
-    self.detailWeatherViewController.view.frame = CGRectMake(self.view.bounds.origin.x,
+    self.detailVC = [[MNCDetailWeatherViewController alloc] init];
+    [self addChildViewController:self.detailVC];
+    self.detailVC.delegate = self;
+    self.detailVC.view.frame = CGRectMake(self.view.bounds.origin.x,
                                                              kScreenH / 3,
                                                              kScreenW,
                                                              kScreenH / 3);
-    self.detailWeatherViewController.view.backgroundColor = nil;
-    [self.view addSubview:self.detailWeatherViewController.view];
+    self.detailVC.view.backgroundColor = nil;
+    [self.view addSubview:self.detailVC.view];
     
     self.tomorrowView = [[MNCSimpleWeatherView alloc] init];
     self.tomorrowView.frame = CGRectMake(0, 0, 200, 120);
@@ -89,7 +92,7 @@
                                                             kScreenH * 3 / 4,
                                                             kScreenW / 2,
                                                             kScreenH / 4)];
-    [self.tomorrowView createUIData:MNCTomorrowTag];
+    [self.tomorrowView createUIData:self.simpleData];
     [self.leftView addSubview:self.tomorrowView];
     [self.view addSubview:self.leftView];
     
@@ -99,11 +102,11 @@
                                                             kScreenH * 3 / 4,
                                                             kScreenW / 2,
                                                             kScreenH / 4)];
-    [self.afterTomorrowView createUIData:MNCAfterTomorrowTag];
+    [self.afterTomorrowView createUIData:self.simpleData];
     [self.rightView addSubview:self.afterTomorrowView];
     [self.view addSubview:self.rightView];
     
-    [self updataWeatherbackgroundImage:[self.detailWeatherData updataState]];
+    [self updataWeatherbackgroundImage:self.detailData.condTxtDay];
 }
 
 - (void)updataSubviewsFromShowLineImageView {
@@ -116,19 +119,19 @@
 #pragma mark - Notification
 
 - (void)updataSimpleUiData:(NSNotification *)notification {
-    self.simpleWeatherData = notification.object;
-    [self.tomorrowView createUIData:MNCTomorrowTag];
-    [self.afterTomorrowView createUIData:MNCAfterTomorrowTag];
+    self.simpleData = notification.object;
+    [self.tomorrowView createUIData:self.simpleData];
+    [self.afterTomorrowView createUIData:self.simpleData];
     NSLog(@"更新simpli数据");
 }
 
 #pragma mark - IBAction/ClickActions
 
 - (IBAction)selectWeatherFromCityAction:(id)sender {
-    if (!self.cityNameTextFIeld.text) {
+    if (!self.cityNameTextField.text) {
         return;
     }
-    [self.weatherMessage useCityNameToRequestWeatherData:self.cityNameTextFIeld.text];
+    [self.Message useCityNameToRequestWeatherData:self.cityNameTextField.text];
 }
 
 #pragma mark - protocol
@@ -160,7 +163,7 @@
     } else if ([stata isEqualToString:@"Sleet"]) { //雨夹雪
         image = [UIImage imageNamed:@"heavySnow.jpg"];
     }
-    self.imageView.image = image;
+    self.backgroundImageView.image = image;
 }
 
 #pragma mark - UItextFieldDelegate
@@ -174,39 +177,39 @@
 }
 #pragma mark - setter && getter
 
-- (MNCWeatherPropertiesFile *)weatherPropertiesFile {
-    if (!_weatherPropertiesFile) {
-        _weatherPropertiesFile = [[MNCWeatherPropertiesFile alloc] init];
+- (MNCWeatherPropertiesFile *)propertiesFile {
+    if (!_propertiesFile) {
+        _propertiesFile = [[MNCWeatherPropertiesFile alloc] init];
     }
-    return _weatherPropertiesFile;
+    return _propertiesFile;
 }
 
-- (MNCWeatherManager *)weatherMessage {
-    if (!_weatherMessage) {
-        _weatherMessage = [[MNCWeatherManager alloc] init];
+- (MNCWeatherManager *)Message {
+    if (!_Message) {
+        _Message = [[MNCWeatherManager alloc] init];
     }
-    return  _weatherMessage;
+    return  _Message;
 }
 
-- (MNCDetailWeatherViewController *)detailWeatherViewController {
-    if (!_detailWeatherViewController) {
-        _detailWeatherViewController = [[MNCDetailWeatherViewController alloc] init];
+- (MNCDetailWeatherViewController *)detailVC {
+    if (!_detailVC) {
+        _detailVC = [[MNCDetailWeatherViewController alloc] init];
     }
-    return _detailWeatherViewController;
+    return _detailVC;
 }
 
-- (MNCDetailWeatherData *)detailWeatherData {
-    if (!_detailWeatherData) {
-        _detailWeatherData = [[MNCDetailWeatherData alloc] init];
+- (MNCDetailWeatherData *)detailData {
+    if (!_detailData) {
+        _detailData = [[MNCDetailWeatherData alloc] init];
     }
-    return _detailWeatherData;
+    return _detailData;
 }
 
-- (MNCSimpleWeatherData *)simpleWeatherData {
-    if (!_simpleWeatherData) {
-        _simpleWeatherData = [[MNCSimpleWeatherData alloc] init];
+- (MNCSimpleWeatherData *)simpleData {
+    if (!_simpleData) {
+        _simpleData = [[MNCSimpleWeatherData alloc] init];
     }
-    return _simpleWeatherData;
+    return _simpleData;
 }
 
 /*

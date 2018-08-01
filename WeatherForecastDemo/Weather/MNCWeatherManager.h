@@ -19,7 +19,7 @@
 
 /**
  使用城市名称去请网络请求天气数据
- 请求成功通过通知 MNCWeatherPropertiesFileNotification 抛给 MNCWeatherPropertiesFile 去保存数据
+ 请求成功通过通知 MNCWeatherPropertiesFileNotification 抛给 MNCWeatherPropertiesFile类去保存数据
  参数说明: cityName  城市名称
  */
 

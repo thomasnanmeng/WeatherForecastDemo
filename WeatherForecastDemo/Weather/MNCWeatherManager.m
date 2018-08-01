@@ -11,13 +11,13 @@
 #import "MNCSimpleWeatherData.h"
 
 @interface MNCWeatherManager ()
-@property (strong, nonatomic) NSDictionary *basicPropertise;
-@property (strong, nonatomic) NSDictionary *todaydataDic;
-@property (strong, nonatomic) NSDictionary *tomorrowDataDic;
-@property (strong, nonatomic) NSDictionary *afterTomorrowDataDic;
-@property (strong, nonatomic) NSMutableArray *weatherDateArray;
-@property (strong, nonatomic) MNCDetailWeatherData *detailWeatherData;
-@property (strong, nonatomic) MNCSimpleWeatherData *simpleWeatherData;
+@property (strong, nonatomic) NSMutableDictionary *basicData;
+@property (strong, nonatomic) NSMutableDictionary *todayData;
+@property (strong, nonatomic) NSMutableDictionary *tomorrowData;
+@property (strong, nonatomic) NSMutableDictionary *afterTomorrowData;
+@property (strong, nonatomic) NSMutableArray *DateArray;
+@property (strong, nonatomic) MNCDetailWeatherData *detailData;
+@property (strong, nonatomic) MNCSimpleWeatherData *simpleData;
 @end
 
 @implementation MNCWeatherManager
@@ -36,8 +36,8 @@
 - (instancetype)init {
     if (!self) {
         self = [super init];
-        self.simpleWeatherData = [[MNCSimpleWeatherData alloc] init];
-        self.detailWeatherData = [[MNCDetailWeatherData alloc] init];
+        _simpleData = [[MNCSimpleWeatherData alloc] init];
+        _detailData = [[MNCDetailWeatherData alloc] init];
     }
     return self;
 }
@@ -46,7 +46,6 @@
 
 - (void)useCityNameToRequestWeatherData:(NSString *)cityName {
     NSString *strUrl = [NSString stringWithFormat:@"https://free-api.heweather.com/s6/weather/forecast?location=%@&key=cbd779e2141b45938d845a2a8cb2345c&lang=en&unit=i",cityName];
-    //创建URL时，如果是中文则不能请求，必须转换
     strUrl = [strUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     NSURLRequest *request = [NSURLRequest requestWithURL: [NSURL URLWithString:strUrl]];
     NSURLSessionDataTask *dataTask = [[NSURLSession sharedSession] dataTaskWithRequest: request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -57,7 +56,7 @@
         NSStringEncoding gbkEncoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
         NSString *responseStr = [[NSString alloc] initWithData: data encoding: gbkEncoding];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self JsonStringToDicString:responseStr];
+            [self jsonStringToDataDic:responseStr];
         });
     }];
     [dataTask resume];
@@ -65,41 +64,39 @@
 
 #pragma mark - Private methods
 
-- (void)JsonStringToDicString:(NSString *)jsonString {
+- (void)jsonStringToDataDic:(NSString *)jsonString {
     if (!jsonString) {
         return ;
     }
     NSError *error = nil;
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *responseDic = [NSJSONSerialization JSONObjectWithData:jsonData
+    NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:jsonData
                                                                 options:NSJSONReadingMutableContainers
                                                                   error:&error];
     if (error) {
         NSLog(@"解析失败 error = %@",error);
         return ;
     }
-    [self responseDicToPropretiesDic:responseDic];
+    [self responseDicToPropretiesDic:dataDic];
 }
 
-- (void)responseDicToPropretiesDic:(NSDictionary *)responseDic {
-    NSArray *responsArray = responseDic[@"HeWeather6"];
+- (void)responseDicToPropretiesDic:(NSDictionary *)dataDic {
+    NSArray *responsArray = dataDic[@"HeWeather6"];
     if ([responsArray count]) {
-        
         [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCWeatherPropertiesFileNotification" object:responsArray];
-
         for (NSDictionary *dic in responsArray) { //一共有四个dic
             if (dic[@"basic"]) {
-                self.basicPropertise = (NSDictionary *)dic[@"basic"];
-                [self.detailWeatherData initDetailWeatherPropertiesFromDic:self.basicPropertise
+                self.basicData = (NSMutableDictionary *)dic[@"basic"];
+                [self.detailData initDetailWeatherPropertiesFromDic:self.basicData
                                                                       info:@"basic"];
             }
             if (dic[@"daily_forecast"]) {
-                self.tomorrowDataDic = (NSDictionary *)[dic[@"daily_forecast"] objectAtIndex:0];
-                [self.detailWeatherData initDetailWeatherPropertiesFromDic:self.tomorrowWeatherDataDic info:@"today"];
-                self.tomorrowDataDic = (NSDictionary *)[dic[@"daily_forecast"] objectAtIndex:1];
-                [self.simpleWeatherData initSimpleWeatherPropertiesFromDic:self.tomorrowDataDic];
-                self.afterTomorrowDataDic = (NSDictionary *)[dic[@"daily_forecast"] objectAtIndex:2];
-                [self.simpleWeatherData initSimpleWeatherPropertiesFromDic:self.afterTomorrowDataDic];
+                self.tomorrowData = (NSMutableDictionary *)[dic[@"daily_forecast"] objectAtIndex:0];
+                [self.detailData initDetailWeatherPropertiesFromDic:self.tomorrowData info:@"today"];
+                self.tomorrowData = (NSMutableDictionary *)[dic[@"daily_forecast"] objectAtIndex:1];
+                [self.simpleData initSimpleWeatherPropertiesFromDic:self.tomorrowData];
+                self.afterTomorrowData = (NSMutableDictionary *)[dic[@"daily_forecast"] objectAtIndex:2];
+                [self.simpleData initSimpleWeatherPropertiesFromDic:self.afterTomorrowData];
 //                [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCWeatherPropertiesFileNotification" object:self userInfo:@{@"key1":self.detailWeatherData,@"key2": self.simpleWeatherData}];
             }
         }
@@ -134,18 +131,18 @@
 
 #pragma mark - setter && getter
 
-- (MNCDetailWeatherData *)detailWeatherData {
-    if (!_detailWeatherData) {
-        _detailWeatherData = [[MNCDetailWeatherData alloc] init];
+- (MNCDetailWeatherData *)detailData {
+    if (!_detailData) {
+        _detailData = [[MNCDetailWeatherData alloc] init];
     }
-    return _detailWeatherData;
+    return _detailData;
 }
 
-- (MNCSimpleWeatherData *)simpleWeatherData {
-    if (!_simpleWeatherData) {
-        _simpleWeatherData = [[MNCSimpleWeatherData alloc] init];
+- (MNCSimpleWeatherData *)simpleData {
+    if (!_simpleData) {
+        _simpleData = [[MNCSimpleWeatherData alloc] init];
     }
-    return _simpleWeatherData;
+    return _simpleData;
 }
 
 

@@ -12,7 +12,7 @@
 #import "MNCWeatherViewController.h"
 
 @interface MNCSimpleWeatherView ()
-@property (strong, nonatomic) MNCWeatherViewController *weatherViewController;
+@property (strong, nonatomic) MNCWeatherViewController *weatherVC;
 @end
 
 @implementation MNCSimpleWeatherView
@@ -32,32 +32,28 @@
 
 - (void)createUIData:(MNCSimpleWeatherData *)simpleData {
     
-    NSString *tmpMax = simpleData.tmpMax;
-    NSString *tmpMin = simpleData.TmpMin;
+    NSString *tmpMax = simpleData.temperatureMax;
+    NSString *tmpMin = simpleData.temperatureMax;
+    NSString *stata = simpleData.condTxtDay;
     
-    UILabel *tmpLab = (UILabel *)[self viewWithTag:101];
-    tmpLab.text = [NSString stringWithFormat:@"%d/%d℃",([tmpMax intValue] - 32) * 5 / 9,
+    UILabel *tempLab = (UILabel *)[self viewWithTag:101];
+    tempLab.text = [NSString stringWithFormat:@"%d/%d℃",([tmpMax intValue] - 32) * 5 / 9,
                    ([tmpMin intValue] - 32) * 5 / 9];
     
-    UILabel *weatherLab = (UILabel *)[self viewWithTag:102];
-    weatherLab.text = [NSString stringWithFormat:@"%@",[self pinYinFromString:condStata]];
+    UILabel *stataLab = (UILabel *)[self viewWithTag:102];
+    stataLab.text = [NSString stringWithFormat:@"%@",[self chineseFromString:stata]];
     
-    UIImageView *weatherImage = (UIImageView *)[self viewWithTag:103];
-    UIImage *image = [self updataWeatherImageIcon:condStata];
-    weatherImage.image = image;
+    UIImageView *ImageIcon = (UIImageView *)[self viewWithTag:103];
+    UIImage *image = [self updataWeatherImageIcon:stata];
+    ImageIcon.image = image;
     
     UILabel *dateLab = (UILabel *)[self viewWithTag:100];
-    if (MNCTomorrowTag == index) {
         dateLab.text = @"明天";
-        [self.weatherViewController.simpleLeftView addSubview:self];
-    } else {
         dateLab.text = @"后天";
-    }
-    [self.weatherViewController.simpleRightView addSubview:self];
 }
 
 - (NSString *)updataWeatherStata:(MNCSimpleWeatherData *)simpleData {
-    return simpleData.conditionsDay;
+    return simpleData.condTxtDay;
 }
 
 #pragma mark - Private methods
@@ -86,25 +82,27 @@
     tmpLab.tag = 101;
     [self addSubview:tmpLab];
     
-    UILabel *weatherLab = [[UILabel alloc] initWithFrame:
+    UILabel *stataLab = [[UILabel alloc] initWithFrame:
                            CGRectMake(10, 50 + 10,100,50)];
-    weatherLab.font = [UIFont fontWithName:@"Arial" size:20];
-    weatherLab.textAlignment = NSTextAlignmentLeft;
-    weatherLab.tag = 102;
-    [self addSubview:weatherLab];
+    stataLab.font = [UIFont fontWithName:@"Arial" size:20];
+    stataLab.textAlignment = NSTextAlignmentLeft;
+    stataLab.tag = 102;
+    [self addSubview:stataLab];
     
-    UIImageView *weatherImagV = [[UIImageView alloc] init];
-    weatherImagV.tag = 103;
-    weatherImagV.frame = CGRectMake(weatherLab.bounds.size.width + 10 ,
+    UIImageView *ImagViewIcon = [[UIImageView alloc] init];
+    ImagViewIcon.tag = 103;
+    ImagViewIcon.frame = CGRectMake(stataLab.bounds.size.width + 10 ,
                                     50 + 10,
                                     50,
                                     50);
-    [self addSubview:weatherImagV];
+    [self addSubview:ImagViewIcon];
 }
+
 - (void)updataSubviewsFromShowLineImageView {
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
-- (NSString *)pinYinFromString:(NSString *)string {
+
+- (NSString *)chineseFromString:(NSString *)string {
     if ([string isEqualToString:@"Cloudy"]) {//多云
         return @"多云";
     } else if ([string isEqualToString:@"shower rain"]) {//阵雨
@@ -135,33 +133,33 @@
     return @"未知";
 }
 
-- (UIImage *)updataWeatherImageIcon:(NSString *)condTextDay {
+- (UIImage *)updataWeatherImageIcon:(NSString *)stata {
     UIImage *image = nil;
-    if ([condTextDay isEqualToString:@"Cloudy"]) {//多云
+    if ([stata isEqualToString:@"Cloudy"]) {//多云
         image = [UIImage imageNamed:@"cloud.png"];
-    } else if ([condTextDay isEqualToString:@"shower rain"]) {//阵雨
+    } else if ([stata isEqualToString:@"shower rain"]) {//阵雨
         image = [UIImage imageNamed:@"rainning.png"];
-    } else if ([condTextDay isEqualToString:@"Overcast"]) { //阴
+    } else if ([stata isEqualToString:@"Overcast"]) { //阴
         image = [UIImage imageNamed:@"cloud.png"];
-    } else if ([condTextDay isEqualToString:@"Sunny"]) {//晴
+    } else if ([stata isEqualToString:@"Sunny"]) {//晴
         image = [UIImage imageNamed:@"sunshine.png"];
-    } else if ([condTextDay isEqualToString:@"Partly Cloudy"]) {//晴间多云
+    } else if ([stata isEqualToString:@"Partly Cloudy"]) {//晴间多云
         image = [UIImage imageNamed:@"cloud.png"];
-    } else if ([condTextDay isEqualToString:@"Thundershower"]) {//雷阵雨
+    } else if ([stata isEqualToString:@"Thundershower"]) {//雷阵雨
         image = [UIImage imageNamed:@"thunder.png"];
-    } else if ([condTextDay isEqualToString:@"Light Rain"]) {//小雨
+    } else if ([stata isEqualToString:@"Light Rain"]) {//小雨
         image = [UIImage imageNamed:@"rainning.png"];
-    } else if ([condTextDay isEqualToString:@"Heavy Rain"]) { //大雨
+    } else if ([stata isEqualToString:@"Heavy Rain"]) { //大雨
         image = [UIImage imageNamed:@"rainning.png"];
-    } else if ([condTextDay isEqualToString:@"Storm"]) {//暴雨
+    } else if ([stata isEqualToString:@"Storm"]) {//暴雨
         image = [UIImage imageNamed:@"rainning.png"];
-    } else if ([condTextDay isEqualToString:@"Light Snow"]) {//小雪
+    } else if ([stata isEqualToString:@"Light Snow"]) {//小雪
         image = [UIImage imageNamed:@"snowwing.png"];
-    } else if ([condTextDay isEqualToString:@"Heavy Snow"]) {//大雪
+    } else if ([stata isEqualToString:@"Heavy Snow"]) {//大雪
         image = [UIImage imageNamed:@"snowwing.png"];
-    } else if ([condTextDay isEqualToString:@"Sleet"]) { //雨夹雪
+    } else if ([stata isEqualToString:@"Sleet"]) { //雨夹雪
         image = [UIImage imageNamed:@"rainAndSnow.png"];
-    } else if ([condTextDay isEqualToString:@"Sunny/Clear"]) {//晴
+    } else if ([stata isEqualToString:@"Sunny/Clear"]) {//晴
         image = [UIImage imageNamed:@"sunshine.png"];
     }
     
@@ -170,18 +168,18 @@
 
 #pragma mark setter && getter
 
-- (MNCSimpleWeatherData *)simpleWeatherData {
-    if (!_simpleWeatherData) {
-        _simpleWeatherData = [[MNCSimpleWeatherData alloc] init];
+- (MNCSimpleWeatherData *)simpleData {
+    if (!_simpleData) {
+        _simpleData = [[MNCSimpleWeatherData alloc] init];
     }
-    return _simpleWeatherData;
+    return _simpleData;
 }
 
-- (MNCWeatherViewController *)weatherViewController {
-    if (!_weatherViewController) {
-        _weatherViewController = [[MNCWeatherViewController alloc] init];
+- (MNCWeatherViewController *)weatherVC {
+    if (!_weatherVC) {
+        _weatherVC = [[MNCWeatherViewController alloc] init];
     }
-    return  _weatherViewController;
+    return  _weatherVC;
 }
 /*
 // Only override drawRect: if you perform custom drawing.

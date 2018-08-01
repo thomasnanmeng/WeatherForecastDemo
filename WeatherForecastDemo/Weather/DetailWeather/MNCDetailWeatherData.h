@@ -56,7 +56,7 @@
  相对湿度
  */
 
-@property (strong, nonatomic) NSString *hum;
+@property (strong, nonatomic) NSString *humidity;
 
 /**
  获取从天气API拉下来的数据，并保存到当前类的全局属性中

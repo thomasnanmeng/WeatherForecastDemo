@@ -10,7 +10,7 @@
 #import "MNCDetailWeatherData.h"
 
 @interface MNCDetailWeatherViewController ()
-@property (strong, nonatomic) MNCDetailWeatherData *detailWeatherData;
+@property (strong, nonatomic) MNCDetailWeatherData *detailData;
 @property (strong, nonatomic) UIImageView *imageView;
 
 @end
@@ -40,61 +40,58 @@
 
 - (void)createUI {
     CGRect rect= self.view.bounds;
-    UILabel *cityName = [[UILabel alloc] initWithFrame:
+    UILabel *cityNameLabel = [[UILabel alloc] initWithFrame:
                          CGRectMake(rect.origin.x + 100,
                                     rect.origin.y + 30,
                                     (rect.size.width - 200) / 2 + 100,
                                     50)];
-    //cityName.backgroundColor = [UIColor blackColor];
-    cityName.tag = 100;
-    cityName.font = [UIFont fontWithName:@"Arial" size:40];
-    cityName.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:cityName];
+    cityNameLabel.tag = 100;
+    cityNameLabel.font = [UIFont fontWithName:@"Arial" size:40];
+    cityNameLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:cityNameLabel];
     
-    UILabel *weatherTemp = [[UILabel alloc] initWithFrame:
+    UILabel *temperatureLab = [[UILabel alloc] initWithFrame:
                             CGRectMake(rect.origin.x + 100,
                                        rect.origin.y + 70,
                                        (rect.size.width - 200) / 2 + 100,
                                        rect.size.height / 6)];
-    //weatherTemp.backgroundColor = [UIColor redColor];
-    weatherTemp.tag = 101;
-    weatherTemp.font = [UIFont fontWithName:@"Arial" size:40];
-    weatherTemp.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:weatherTemp];
+    temperatureLab.tag = 101;
+    temperatureLab.font = [UIFont fontWithName:@"Arial" size:40];
+    temperatureLab.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:temperatureLab];
     
-    UILabel *weatherPropertiseLable = [[UILabel alloc] initWithFrame:
+    UILabel *moreElementLab = [[UILabel alloc] initWithFrame:
                                        CGRectMake(rect.origin.x,
-                                                  rect.origin.y + 30 + weatherTemp.bounds.size.height,
+                                                  rect.origin.y + 30 + temperatureLab.bounds.size.height,
                                                   rect.size.width + 30,
                                                   50)];
-    //weatherPropertiseLable.backgroundColor = [UIColor blackColor];
-    weatherPropertiseLable.font = [UIFont fontWithName:@"Arial" size:17];
-    weatherPropertiseLable.textAlignment = NSTextAlignmentCenter;
-    weatherPropertiseLable.tag = 102;
-    [self.view addSubview:weatherPropertiseLable];
+    moreElementLab.font = [UIFont fontWithName:@"Arial" size:17];
+    moreElementLab.textAlignment = NSTextAlignmentCenter;
+    moreElementLab.tag = 102;
+    [self.view addSubview:moreElementLab];
 }
 
 - (void)createUIData {
-    NSString *weatherCity = [self.detailWeatherData updataCity];
-    NSString *weatherTempMax = [self.detailWeatherData updataTempMax];
-    NSString *weatherTempMin = [self.detailWeatherData updataTempMin];
-    NSString *weatherHum = [self.detailWeatherData updataHum];
-    NSString *weatherState = [self.detailWeatherData updataState];
-    NSString *weatherWindForce = [self.detailWeatherData updataWindForce];
+    NSString *cityname = self.detailWeatherData.cityName;
+    NSString *temperatureMax = self.detailWeatherData.temperatureMax;
+    NSString *temperatureMin = self.detailWeatherData.temperatureMin;
+    NSString *humidity = self.detailWeatherData.humidity;
+    NSString *State = self.detailWeatherData.humidity;
+    NSString *WindForce = self.detailWeatherData.windForce;
     
-    UILabel *cityName = (UILabel *)[self.view viewWithTag:100];
-    cityName.text = [NSString stringWithFormat:@"%@",[self pinYinToChinese:weatherCity]];
+    UILabel *cityNameLab = (UILabel *)[self.view viewWithTag:100];
+    cityNameLab.text = [NSString stringWithFormat:@"%@",[self pinYinToChinese:cityname]];
     
-    UILabel *weatherTemp = (UILabel *)[self.view viewWithTag:101];
-    weatherTemp.text = [NSString stringWithFormat:@"%d℃",(([weatherTempMax intValue] - 32) * 5 / 9)];
+    UILabel *tempMaxLab = (UILabel *)[self.view viewWithTag:101];
+    tempMaxLab.text = [NSString stringWithFormat:@"%d℃",(([temperatureMax intValue] - 32) * 5 / 9)];
     
-    UILabel *weatherPropertiseLable = (UILabel *)[self.view viewWithTag:102];
-    weatherPropertiseLable.text = [NSString stringWithFormat:@"温度:%d/%d℃  湿度:%@ 风力:%@ %@",
-                                   (([weatherTempMax intValue] - 32) * 5 / 9),
-                                   (([weatherTempMin intValue] - 32) * 5 / 9),
-                                   weatherHum,
-                                   weatherWindForce,
-                                   weatherState];
+    UILabel *moreElementLab = (UILabel *)[self.view viewWithTag:102];
+    moreElementLab.text = [NSString stringWithFormat:@"温度:%d/%d℃  湿度:%@ 风力:%@ %@",
+                                   (([temperatureMax intValue] - 32) * 5 / 9),
+                                   (([temperatureMin intValue] - 32) * 5 / 9),
+                                   humidity,
+                                   WindForce,
+                                   State];
 }
 
 - (NSString *)pinYinToChinese:(NSString *)pinYin {
@@ -128,8 +125,8 @@
 }
 
 - (void)updataDetailWeatherUIData:(NSNotification *)notification {
-    self.detailWeatherData = notification.object;
-    [_delegate updataWeatherbackgroundImage:[self.detailWeatherData updataState]];
+    self.detailData = notification.object;
+    [_delegate updataWeatherbackgroundImage:self.detailData.condTxtDay];
     [self updataDetailUIData];
     NSLog(@"更新Detail数据");
 }
@@ -143,11 +140,11 @@
 
 #pragma mark - setter && getter
 
-- (MNCDetailWeatherData *)detailWeatherData {
-    if (!_detailWeatherData) {
-        _detailWeatherData = [[MNCDetailWeatherData alloc] init];
+- (MNCDetailWeatherData *)detailData {
+    if (!_detailData) {
+        _detailData = [[MNCDetailWeatherData alloc] init];
     }
-    return _detailWeatherData;
+    return _detailData;
 }
 
 #pragma mark - Navigation

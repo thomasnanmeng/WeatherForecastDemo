@@ -21,7 +21,7 @@
 @interface MNCDetailWeatherViewController : UIViewController
 
 /**
- 协议
+ 更改 MNCWeatherViewController类的背景图片 delegate
  */
 
 @property (weak, nonatomic) id <MNCDetailViewControllerDelegate> delegate;

@@ -10,7 +10,7 @@
 #import "MNCWeatherPropertiesFile.h"
 
 @interface MNCSimpleWeatherData ()
-@property (strong, nonatomic) MNCWeatherPropertiesFile *weatherDataFile;
+@property (strong, nonatomic) MNCWeatherPropertiesFile *DataFile;
 @end
 
 @implementation MNCSimpleWeatherData
@@ -21,9 +21,8 @@
 {
     self = [super init];
     if (self) {
-        self.weatherDataFile = [[MNCWeatherPropertiesFile alloc] init];
+        _DataFile = [[MNCWeatherPropertiesFile alloc] init];
     }
-    
     return self;
 }
 
@@ -32,63 +31,37 @@
 - (void)initSimpleWeatherPropertiesFromDic:(NSDictionary *)propretiesDic {
     if ([propretiesDic count]) {
         NSArray *propertiesArray = [propretiesDic allValues];
-        self.TmpMax = propertiesArray[2];
-        self.simpleTmpMin = propertiesArray[15];
-        self.simpleCondTextDay = propertiesArray[10];
-        self.simpleCondTextNight = propertiesArray[11];
-        self.simpleCurrentDate = propertiesArray[12];
+        self.temperatureMax = propertiesArray[2];
+        self.temperatureMin = propertiesArray[15];
+        self.condTxtDay = propertiesArray[10];
+        self.condTxtNight = propertiesArray[11];
+        self.Date = propertiesArray[12];
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCSimpleWeatherFromWebNotification"
                                                         object:self];
-    [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSNotificationName)#> object:<#(nullable id)#> userInfo:<#(nullable NSDictionary *)#>];
-}
-
-- (NSString *)updataTmpMaxData:(NSUInteger)index {
-    if (!self.simpleWeatherTmpMax) {
-        [self initWeatherPropertiesFromPlist:index];
-    }
-    return self.simpleWeatherTmpMax;
-}
-
-- (NSString *)updataTmpMinData:(NSUInteger)index {
-    if (!self.simpleWeatherTmpMin) {
-        [self initWeatherPropertiesFromPlist:index];
-    }
-    return self.simpleWeatherTmpMin;
-}
-
-- (NSString *)updataWeatherState:(NSUInteger)index {
-    if (!self.simpleWeatherCondTextDay) {
-        [self initWeatherPropertiesFromPlist:index];
-    }
-    return self.simpleWeatherCondTextDay;
-}
-
-- (NSString *)updataDateData:(NSUInteger)index {
-    if (!self.simpleWeatherCurrentDate) {
-        [self initWeatherPropertiesFromPlist:index];
-    }    return self.simpleWeatherCurrentDate;
+//    [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSNotificationName)#> object:<#(nullable id)#> userInfo:<#(nullable NSDictionary *)#>];
 }
 
 #pragma mark - Private methods
 
-- (void)initWeatherPropertiesFromPlist:(NSUInteger) index {
+- (void)initWeatherPropertiesFromPlist:(MNCSimpleWeatherData *)simpleData {
     //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
-    if (![self.weatherDataFile.weatherPropertiesInFiled count]) {
-        self.weatherDataFile = [[MNCWeatherPropertiesFile alloc] init];
+    if (![self.DataFile.dataArray count]) {
+        self.DataFile = [[MNCWeatherPropertiesFile alloc] init];
     }
-    NSMutableDictionary *dic = [self.weatherDataFile.weatherPropertiesInFiled objectAtIndex:index];
-    for (NSString *weatherProperty in [dic allKeys]) {
-        if ([weatherProperty isEqualToString:@"cond_txt_d"]) {
-            self.simpleWeatherCondTextDay = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"cond_txt_n"]) {
-            self.simpleWeatherCondTextNight = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"tmp_max"]) {
-            self.simpleWeatherTmpMax = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"tmp_min"]) {
-            self.simpleWeatherTmpMin = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"date"]) {
-            self.simpleWeatherCurrentDate = [dic objectForKey:weatherProperty];
+    //不能objectAtIndex = 1;
+    NSMutableDictionary *dic = [self.DataFile.dataArray objectAtIndex:1];
+    for (NSString *element in [dic allKeys]) {
+        if ([element isEqualToString:@"cond_txt_d"]) {
+            self.condTxtDay = [dic objectForKey:element];
+        } else if ([element isEqualToString:@"cond_txt_n"]) {
+            self.condTxtNight = [dic objectForKey:element];
+        } else if ([element isEqualToString:@"tmp_max"]) {
+            self.temperatureMax = [dic objectForKey:element];
+        } else if ([element isEqualToString:@"tmp_min"]) {
+            self.temperatureMin = [dic objectForKey:element];
+        } else if ([element isEqualToString:@"date"]) {
+            self.Date = [dic objectForKey:element];
         }
     }
 }
