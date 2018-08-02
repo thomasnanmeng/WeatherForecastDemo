@@ -37,8 +37,6 @@
 - (instancetype)init {
     if (!self) {
         self = [super init];
-        _simpleData = [[MNCSimpleWeatherData alloc] init];
-        _detailData = [[MNCDetailWeatherData alloc] init];
     }
     return self;
 }
@@ -78,15 +76,12 @@
         NSLog(@"解析失败 error = %@",error);
         return ;
     }
-    [self responseDicToPropretiesDic:dataDic];
+    [self downloadedDataFromAPINotification:dataDic];
 }
 
-- (void)responseDicToPropretiesDic:(NSDictionary *)dataDic {
-    NSArray *responsArray = dataDic[kMNCWeatherPropertiesAPIHeaderKeyHeWeather6];
-    if ([responsArray count]) {
-        //是否需要一步把数据解析出来
-        [[NSNotificationCenter defaultCenter] postNotificationName:kMNCDownloadedDataFromWeatherAPINotification object:responsArray];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kMNCDownloadedDataFromWeatherAPINotification object:self userInfo:@{@"key1":self.detailData,@"key2": self.simpleData}];
+- (void)downloadedDataFromAPINotification:(NSDictionary *)dataDic {
+    if ([dataDic count]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMNCDownloadedDataFromWeatherAPINotification object:self userInfo:dataDic];
     }
 }
 
@@ -98,15 +93,11 @@
                               kCFStringTransformMandarinLatin, NO)) {
             NSLog(@"pinyin: %@", pinYin);
         }
-        //再转换为不带声调的拼音
         if (CFStringTransform((__bridge CFMutableStringRef)pinYin, 0,
                               kCFStringTransformStripDiacritics, NO)) {
             NSLog(@"pinyin: %@", pinYin);
-            //再去除空格，将拼音连在一起
             pinYinStr = [NSString stringWithString:pinYin];
-            // 去除掉首尾的空白字符和换行字符
             pinYinStr = [pinYinStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-            // 去除掉其它位置的空白字符和换行字符
             pinYinStr = [pinYinStr stringByReplacingOccurrencesOfString:@"\r" withString:@""];
             pinYinStr = [pinYinStr stringByReplacingOccurrencesOfString:@"\n" withString:@""];
             pinYinStr = [pinYinStr stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -115,22 +106,5 @@
     }
     return pinYinStr;
 }
-
-#pragma mark - setter && getter
-
-- (MNCDetailWeatherData *)detailData {
-    if (!_detailData) {
-        _detailData = [[MNCDetailWeatherData alloc] init];
-    }
-    return _detailData;
-}
-
-- (MNCSimpleWeatherData *)simpleData {
-    if (!_simpleData) {
-        _simpleData = [[MNCSimpleWeatherData alloc] init];
-    }
-    return _simpleData;
-}
-
 
 @end

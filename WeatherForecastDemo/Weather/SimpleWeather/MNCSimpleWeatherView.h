@@ -16,6 +16,7 @@
 /**
  数据模型 tomorrowData or afterTomorrowData 的对象
  */
+
 @property (strong, nonatomic) MNCSimpleWeatherData *simpleData;
 
 /**

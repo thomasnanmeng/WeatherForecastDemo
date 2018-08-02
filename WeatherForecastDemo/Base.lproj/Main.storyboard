@@ -42,7 +42,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="cityNameTextFIeld" destination="Rm5-wt-8he" id="fNX-e8-8MD"/>
+                        <outlet property="cityNameTextField" destination="Rm5-wt-8he" id="Hdd-dD-XDo"/>
                         <outlet property="searchDisplayController" destination="hO7-ah-40z" id="kjT-hZ-dZF"/>
                     </connections>
                 </viewController>

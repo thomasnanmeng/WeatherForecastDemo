@@ -42,7 +42,7 @@
                    ([tmpMin intValue] - 32) * 5 / 9];
     
     UILabel *stateLabel = (UILabel *)[self viewWithTag:102];
-    stateLabel.text = [NSString stringWithFormat:@"%@",[self chineseFromWeatherStatesString:state]];
+    stateLabel.text = [NSString stringWithFormat:@"%@",[self getChineseFromWeatherStatesString:state]];
     
     UIImageView *iconView = (UIImageView *)[self viewWithTag:103];
     UIImage *image = [self updataWeatherIcon:state];
@@ -99,11 +99,7 @@
     [self addSubview:iconView];
 }
 
-- (void)updataSubviewsFromShowLineImageView {
-    [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-}
-
-- (NSString *)chineseFromWeatherStatesString:(NSString *)stateString {
+- (NSString *)getChineseFromWeatherStatesString:(NSString *)stateString {
     if ([stateString isEqualToString:MNCWeatherStateCloudy]) {//多云
         return @"多云";
     } else if ([stateString isEqualToString:MNCWeatherStateShowerRain]) {//阵雨
@@ -163,7 +159,6 @@
     } else if ([state isEqualToString:MNCWeatherStateSunnyClear]) {//晴
         icon = [UIImage imageNamed:@"sunshine.png"];
     }
-    
     return icon;
 }
 

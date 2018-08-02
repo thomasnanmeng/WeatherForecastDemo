@@ -3,12 +3,24 @@
 <plist version="1.0">
 <array>
 	<dict>
-		<key>cityNameC</key>
+		<key>xian</key>
 		<string>西安</string>
 	</dict>
 	<dict>
-		<key>cityNameC</key>
+		<key>shenzhen</key>
 		<string>深圳</string>
+	</dict>
+	<dict>
+		<key>shanghai</key>
+		<string>上海</string>
+	</dict>
+	<dict>
+		<key>wuhan</key>
+		<string>武汉</string>
+	</dict>
+	<dict>
+		<key>beijing</key>
+		<string>北京</string>
 	</dict>
 </array>
 </plist>

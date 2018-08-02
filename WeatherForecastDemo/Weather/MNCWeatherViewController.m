@@ -44,18 +44,19 @@
     [super viewDidLoad];
     self.cityNameTextField.delegate = self;
     [self createImageView];
-    [self initWeatherClass];
+    [self initWeatherClassWithView];
+    [self updataWeatherBackgroundImage:self.detailData.conditionDay];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updataSimpleUIData:)  name:@"MNCSimpleWeatherFromWebNotification"
                                                object:nil];
     // Do any additional setup after loading the view.
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    NSLog(@"视图加载完成调用");
-    [self.message useCityNameToRequestWeatherData:self.detailData.cityName];
-}
+//- (void)viewDidAppear:(BOOL)animated {
+//    [super viewDidAppear:animated];
+//    NSLog(@"视图加载完成调用");
+//    [self.message useCityNameToRequestWeatherData:self.detailData.cityName];
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -67,10 +68,11 @@
 - (void)createImageView {
     self.backgroundImageView = [[UIImageView alloc] init];
     self.backgroundImageView.frame = CGRectMake(0, 0, kScreenW, kScreenH);
+    self.backgroundImageView.image = nil;
     [self.view addSubview:self.backgroundImageView];
 }
 
-- (void)initWeatherClass {
+- (void)initWeatherClassWithView {
     self.simpleView = [[MNCSimpleWeatherView alloc] init];
     self.propertiesFile = [[MNCWeatherPropertiesFile alloc] init];
     self.message = [MNCWeatherManager sharedInstance];
@@ -105,11 +107,9 @@
     [self.afterTomorrowView createUIData:self.simpleData];
     [self.rightView addSubview:self.afterTomorrowView];
     [self.view addSubview:self.rightView];
-    
-    [self updataWeatherbackgroundImage:self.detailData.conditionDay];
 }
 
-- (void)updataSubviewsFromShowLineImageView {
+- (void)updataSubviewsFromView {
     [self.leftView.subviews makeObjectsPerformSelector:
      @selector(removeFromSuperview)];
     [self.rightView.subviews makeObjectsPerformSelector:
@@ -127,7 +127,7 @@
 
 #pragma mark - IBAction/ClickActions
 
-- (IBAction)selectWeatherFromCityAction:(id)sender {
+- (IBAction)searchButtonWithWeatherAPIDataDidclick:(id)sender {
     if (!self.cityNameTextField.text) {
         return;
     }
@@ -136,7 +136,7 @@
 
 #pragma mark - protocol
 
-- (void)updataWeatherbackgroundImage:(NSString *)state {
+- (void)updataWeatherBackgroundImage:(NSString *)state {
     UIImage *image = nil;
     if ([state isEqualToString:MNCWeatherStateCloudy]) {//多云
         image = [UIImage imageNamed:@"partlyCloudy.jpg"];

@@ -15,7 +15,7 @@
  参数说明: state   当天的天气状况
  */
 
-- (void)updataWeatherbackgroundImage:(NSString *)state;
+- (void)updataWeatherBackgroundImage:(NSString *)state;
 @end
 
 @interface MNCDetailWeatherViewController : UIViewController

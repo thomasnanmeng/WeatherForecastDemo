@@ -120,12 +120,12 @@
 
 - (void)updataDetailWeatherUIData:(NSNotification *)notification {
     self.detailData = notification.object;
-    [_delegate updataWeatherbackgroundImage:self.detailData.conditionDay];
+    //更新数据时，更新背景
+    [_delegate updataWeatherBackgroundImage:self.detailData.conditionDay];
     [self updataDetailUIData];
-    NSLog(@"更新Detail数据");
 }
 
-- (void)removeNotificationAction {
+- (void)removeNotification {
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:@"kMarketPlateUpdataNotification"
                                                   object:nil];

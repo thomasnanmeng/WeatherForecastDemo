@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		074D3DA62112AFB50070EE32 /* MNCWeatherPropertiesDataList.plist in Resources */ = {isa = PBXBuildFile; fileRef = 074D3DA52112AFB50070EE32 /* MNCWeatherPropertiesDataList.plist */; };
 		07DA1EE6210087210052104D /* MNCWeatherPropertiesFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DA1EE5210087210052104D /* MNCWeatherPropertiesFile.m */; };
 		07DA1EE92100C36A0052104D /* MNCDetailWeatherData.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DA1EE82100C36A0052104D /* MNCDetailWeatherData.m */; };
 		07DA1EEC2100C38E0052104D /* MNCSimpleWeatherData.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DA1EEB2100C38E0052104D /* MNCSimpleWeatherData.m */; };
 		07DA1F1C2102CFF10052104D /* sunny.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DA1F1B2102CFF10052104D /* sunny.jpg */; };
 		07DA1F1E2102CFF70052104D /* snow.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 07DA1F1D2102CFF60052104D /* snow.jpg */; };
-		07DA1F212104961C0052104D /* MNCWeatherPropertiesDataFile.plist in Resources */ = {isa = PBXBuildFile; fileRef = 07DA1F202104961C0052104D /* MNCWeatherPropertiesDataFile.plist */; };
 		07E9347120FD987C00667897 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E9347020FD987C00667897 /* AppDelegate.m */; };
 		07E9347720FD987C00667897 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07E9347520FD987C00667897 /* Main.storyboard */; };
 		07E9347920FD987C00667897 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07E9347820FD987C00667897 /* Assets.xcassets */; };
@@ -59,6 +59,7 @@
 
 /* Begin PBXFileReference section */
 		074D3DA42111E7D70070EE32 /* MNCHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNCHeader.h; sourceTree = "<group>"; };
+		074D3DA52112AFB50070EE32 /* MNCWeatherPropertiesDataList.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MNCWeatherPropertiesDataList.plist; sourceTree = "<group>"; };
 		07DA1EE4210087210052104D /* MNCWeatherPropertiesFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNCWeatherPropertiesFile.h; sourceTree = "<group>"; };
 		07DA1EE5210087210052104D /* MNCWeatherPropertiesFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MNCWeatherPropertiesFile.m; sourceTree = "<group>"; };
 		07DA1EE72100C36A0052104D /* MNCDetailWeatherData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNCDetailWeatherData.h; sourceTree = "<group>"; };
@@ -68,7 +69,6 @@
 		07DA1F19210183F50052104D /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		07DA1F1B2102CFF10052104D /* sunny.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sunny.jpg; sourceTree = "<group>"; };
 		07DA1F1D2102CFF60052104D /* snow.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = snow.jpg; sourceTree = "<group>"; };
-		07DA1F202104961C0052104D /* MNCWeatherPropertiesDataFile.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MNCWeatherPropertiesDataFile.plist; sourceTree = "<group>"; };
 		07E9346C20FD987C00667897 /* WeatherForecastDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherForecastDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07E9346F20FD987C00667897 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		07E9347020FD987C00667897 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -137,7 +137,7 @@
 			children = (
 				07DA1EE4210087210052104D /* MNCWeatherPropertiesFile.h */,
 				07DA1EE5210087210052104D /* MNCWeatherPropertiesFile.m */,
-				07DA1F202104961C0052104D /* MNCWeatherPropertiesDataFile.plist */,
+				074D3DA52112AFB50070EE32 /* MNCWeatherPropertiesDataList.plist */,
 			);
 			path = WeatherFile;
 			sourceTree = "<group>";
@@ -373,7 +373,7 @@
 			files = (
 				07E934C720FEEB8900667897 /* thunder.png in Resources */,
 				07F310362105B59300F307F9 /* rain.jpeg in Resources */,
-				07DA1F212104961C0052104D /* MNCWeatherPropertiesDataFile.plist in Resources */,
+				074D3DA62112AFB50070EE32 /* MNCWeatherPropertiesDataList.plist in Resources */,
 				07E934C820FEEB8900667897 /* rainAndSnow.png in Resources */,
 				07E934C920FEEB8900667897 /* sunAndRain.png in Resources */,
 				07E934CB20FEEB8900667897 /* cloud.png in Resources */,

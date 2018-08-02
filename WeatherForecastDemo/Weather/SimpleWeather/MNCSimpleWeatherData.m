@@ -30,12 +30,6 @@
     return self;
 }
 
-#pragma mark - Public methods
-
-
-//    [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSNotificationName)#> object:<#(nullable id)#> userInfo:<#(nullable NSDictionary *)#>];
-
-
 #pragma mark - Private methods
 
 - (void)initWeatherPropertiesFromPlist:(NSNotification *)notificion {

@@ -21,7 +21,7 @@
     if (!self) {
         self = [super init];
     }
-    [self initWeatherData];
+    [self initWeatherDataFromFile];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(updataWeacherDataToFiled:) name:kMNCDownloadedDataFromWeatherAPINotification
                                                object:nil];
@@ -30,24 +30,24 @@
 
 #pragma mark - Public methods
 
-- (void)changeWeatherPropertiesToFiled:(NSArray *)weatherPropertyArray{
+- (void)changeWeatherPropertiesToFiled:(NSArray *)dataArray{
     //传进来的是所有拉下来的数据 ，格式为 arra  里面为几个dic
-    if ([weatherPropertyArray count]) {
+    if ([dataArray count]) {
         NSDictionary *weatherProperty = nil;
-        for (NSDictionary *dic in weatherPropertyArray) { //一共有四个dic
+        for (NSDictionary *dic in dataArray) { //一共有四个dic
             if (dic[kMNCWeatherPropertiesAPIClassifyKeyBasic]) {
                 weatherProperty = (NSDictionary *)dic[kMNCWeatherPropertiesAPIClassifyKeyBasic];
-                [self changeWeatherPropertiesToFiledInDetail:weatherProperty
+                [self changePropertiyToFile:weatherProperty
                                                         info:kMNCWeatherPropertiesAPIClassifyKeyBasic];
             }
             if (dic[kMNCWeatherPropertiesAPIClassifyKeyDailyForecast]) {
                 for (NSUInteger index = 0; index < 3; index ++)
                 weatherProperty = (NSDictionary *)[dic[kMNCWeatherPropertiesAPIClassifyKeyDailyForecast] objectAtIndex:index];
-                [self changeWeatherPropertiesToFiledInDetail:weatherProperty info:kMNCWeatherClassifyToday];
+                [self changePropertiyToFile:weatherProperty info:kMNCWeatherClassifyToday];
                 weatherProperty = (NSDictionary *)[dic[kMNCWeatherPropertiesAPIClassifyKeyDailyForecast] objectAtIndex:1];
-                [self changeWeatherPropertiesToFiledInDetail:weatherProperty info:kMNCWeatherClassifyTomorrow];
+                [self changePropertiyToFile:weatherProperty info:kMNCWeatherClassifyTomorrow];
                 weatherProperty = (NSDictionary *)[dic[kMNCWeatherPropertiesAPIClassifyKeyDailyForecast] objectAtIndex:2];
-                [self changeWeatherPropertiesToFiledInDetail:weatherProperty info:kMNCWeatherClassifyAfterTomorrow];
+                [self changePropertiyToFile:weatherProperty info:kMNCWeatherClassifyAfterTomorrow];
             }
         }
     }
@@ -56,7 +56,7 @@
 
 #pragma mark - Private methods
 
-- (void)initWeatherData {
+- (void)initWeatherDataFromFile {
     NSString *dir = [self getSaveFiledDir];
     NSString *path = [self getSaveFileName];
     [[NSFileManager defaultManager] createDirectoryAtPath: dir
@@ -65,7 +65,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath: path]) {
         _dataArray = [NSMutableArray arrayWithContentsOfFile: path];
     } else {
-        NSString *initPath = [[NSBundle mainBundle] pathForResource: @"MNCWeatherPropertiesDataFile"
+        NSString *initPath = [[NSBundle mainBundle] pathForResource: @"MNCWeatherPropertiesDataList"
                                                              ofType: @"plist"];
         _dataArray = [NSMutableArray arrayWithContentsOfFile: initPath];
         [_dataArray writeToFile: path atomically: YES];
@@ -73,14 +73,14 @@
     _dataArray = [NSMutableArray arrayWithContentsOfFile: path];
 }
 
-- (void)addWeatherPropertiesToFiled:(NSString *)key value:(NSString *)value indix:(NSUInteger) index {
+- (void)addPropertyToFile:(NSString *)key value:(NSString *)value indix:(NSUInteger) index {
     if(key) {
         [[self.dataArray objectAtIndex:index] setValue:value forKey:key];
     }
     [self.dataArray writeToFile:[self getSaveFileName] atomically:YES];
 }
 
-- (void)deleteWeatherPropertiesToFiled:(NSString *)key {
+- (void)deletePropertyFromFiled:(NSString *)key {
     if (key) {
         for (NSUInteger i = 0; i< self.dataArray.count; i++) {
             [[self.dataArray objectAtIndex:i] removeObjectForKey:key];
@@ -89,7 +89,7 @@
     }
 }
 
-- (void)changeWeatherPropertiesToFiledInDetail:(NSDictionary *)weatherProperty info:(NSString *)flag {
+- (void)changePropertiyToFile:(NSDictionary *)weatherProperty info:(NSString *)flag {
     if ([weatherProperty count]) {
         NSUInteger i = 0;
         NSDictionary *dic = nil;
@@ -103,7 +103,7 @@
             for (NSString *weatherPropertyKey in [weatherProperty allKeys]) {
                 if ([weatherKey isEqualToString:weatherPropertyKey]) {
                     NSString * value = [weatherProperty objectForKey:weatherKey];
-                    [self addWeatherPropertiesToFiled:weatherKey value:value indix:i];
+                    [self addPropertyToFile:weatherKey value:value indix:i];
                     break;
                 }
             }
@@ -121,13 +121,14 @@
 
 - (NSString *)getSaveFileName {
     NSString *dir = [self getSaveFiledDir];
-    NSString *path = [dir stringByAppendingPathComponent:@"MNCWeatherPropertiesDataFile.plist"];
+    NSString *path = [dir stringByAppendingPathComponent:@"MNCWeatherPropertiesDataList.plist"];
     return path;
 }
 
 #pragma mark - Notification
 
 - (void)updataWeacherDataToFiled:(NSNotification *)notification {
+    //NSArray *responsArray = dataDic[kMNCWeatherPropertiesAPIHeaderKeyHeWeather6];
     [self changeWeatherPropertiesToFiled:notification.object];
 }
 
