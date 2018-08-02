@@ -45,14 +45,12 @@
  参数说明 : propretiesDic 拉取到的当天天气数据
  */
 
-- (void)initSimpleWeatherPropertiesFromDic:(NSDictionary *)propretiesDic;
 
 /**
  获取plist文件中保存的数据，并保存到当前类的全局属性中
  参数说明 : simpleData tomorrowData or afterTomorrowData
  */
 
-- (void)initWeatherPropertiesFromPlist:(MNCSimpleWeatherData *)simpleData;
 
 
 @end

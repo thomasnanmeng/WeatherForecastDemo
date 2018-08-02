@@ -12,10 +12,10 @@
 
 /**
  利用传入的天气状况参数更新MNCWeatherViewController类的背景图片
- 参数说明: stata   当天的天气状况
+ 参数说明: state   当天的天气状况
  */
 
-- (void)updataWeatherbackgroundImage:(NSString *)stata;
+- (void)updataWeatherbackgroundImage:(NSString *)state;
 @end
 
 @interface MNCDetailWeatherViewController : UIViewController

@@ -30,5 +30,5 @@
  参数说明: simpleData 一个类对象，可以为明天数据或者后天数据
  */
 
-- (NSString *)updataWeatherStata:(MNCSimpleWeatherData *)simpleData;
+- (NSString *)updataWeatherState:(MNCSimpleWeatherData *)simpleData;
 @end

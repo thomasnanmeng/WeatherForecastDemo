@@ -8,6 +8,7 @@
 
 #import "MNCSimpleWeatherData.h"
 #import "MNCWeatherPropertiesFile.h"
+#import "MNCHeader.h"
 
 @interface MNCSimpleWeatherData ()
 @property (strong, nonatomic) MNCWeatherPropertiesFile *dataFile;
@@ -21,30 +22,23 @@
 {
     self = [super init];
     if (self) {
-        _dataFile = [[MNCWeatherPropertiesFile alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(initWeatherPropertiesFromPlist:)
+                                                     name:kMNCWeatherPropertiesFileDidChangeNotification
+                                                   object:nil];
     }
     return self;
 }
 
 #pragma mark - Public methods
 
-- (void)initSimpleWeatherPropertiesFromDic:(NSDictionary *)propretiesDic {
-    if ([propretiesDic count]) {
-        NSArray *propertiesArray = [propretiesDic allValues];
-        self.temperatureMax = propertiesArray[2];
-        self.temperatureMin = propertiesArray[15];
-        self.conditionDay = propertiesArray[10];
-        self.conditionNight = propertiesArray[11];
-        self.date = propertiesArray[12];
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCSimpleWeatherFromWebNotification"
-                                                        object:self];
+
 //    [[NSNotificationCenter defaultCenter] postNotificationName:<#(nonnull NSNotificationName)#> object:<#(nullable id)#> userInfo:<#(nullable NSDictionary *)#>];
-}
+
 
 #pragma mark - Private methods
 
-- (void)initWeatherPropertiesFromPlist:(MNCSimpleWeatherData *)simpleData {
+- (void)initWeatherPropertiesFromPlist:(NSNotification *)notificion {
     //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
     if (![self.dataFile.dataArray count]) {
         self.dataFile = [[MNCWeatherPropertiesFile alloc] init];
@@ -52,15 +46,15 @@
     //不能objectAtIndex = 1;
     NSMutableDictionary *dic = [self.dataFile.dataArray objectAtIndex:1];
     for (NSString *element in [dic allKeys]) {
-        if ([element isEqualToString:@"cond_txt_d"]) {
+        if ([element isEqualToString:kMNCWeatherPropertiesFileColumnsKeyConditionDay]) {
             self.conditionDay = [dic objectForKey:element];
-        } else if ([element isEqualToString:@"cond_txt_n"]) {
+        } else if ([element isEqualToString:kMNCWeatherPropertiesFileColumnsKeyConditionNight]) {
             self.conditionNight = [dic objectForKey:element];
-        } else if ([element isEqualToString:@"tmp_max"]) {
+        } else if ([element isEqualToString:kMNCWeatherPropertiesFileColumnsKeyTemperatureMax]) {
             self.temperatureMax = [dic objectForKey:element];
-        } else if ([element isEqualToString:@"tmp_min"]) {
+        } else if ([element isEqualToString:kMNCWeatherPropertiesFileColumnsKeyAdministrationZone]) {
             self.temperatureMin = [dic objectForKey:element];
-        } else if ([element isEqualToString:@"date"]) {
+        } else if ([element isEqualToString:kMNCWeatherPropertiesFileColumnsKeyDate]) {
             self.date = [dic objectForKey:element];
         }
     }

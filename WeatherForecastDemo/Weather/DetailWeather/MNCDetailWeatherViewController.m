@@ -23,12 +23,6 @@
     [super viewDidLoad];
     [self createUI];
     [self createUIData];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(updataDetailWeatherUIData:)
-                                                 name:@"MNCDetailWeatherDataNotification"
-                                               object:nil];
-    
-    //self.todayWeatherData = [[MNCTodayWeatherData alloc] init];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -126,7 +120,7 @@
 
 - (void)updataDetailWeatherUIData:(NSNotification *)notification {
     self.detailData = notification.object;
-    [_delegate updataWeatherbackgroundImage:self.detailData.condTxtDay];
+    [_delegate updataWeatherbackgroundImage:self.detailData.conditionDay];
     [self updataDetailUIData];
     NSLog(@"更新Detail数据");
 }

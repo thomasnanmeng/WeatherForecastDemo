@@ -10,6 +10,7 @@
 #import "MNCSimpleWeatherData.h"
 #import "MNCDetailWeatherData.h"
 #import "MNCWeatherViewController.h"
+#import "MNCHeader.h"
 
 @interface MNCSimpleWeatherView ()
 @property (strong, nonatomic) MNCWeatherViewController *weatherVC;
@@ -40,8 +41,8 @@
     tempLabel.text = [NSString stringWithFormat:@"%d/%d℃",([tmpMax intValue] - 32) * 5 / 9,
                    ([tmpMin intValue] - 32) * 5 / 9];
     
-    UILabel *stataLabel = (UILabel *)[self viewWithTag:102];
-    stataLabel.text = [NSString stringWithFormat:@"%@",[self chineseFromWeatherStatesString:state]];
+    UILabel *stateLabel = (UILabel *)[self viewWithTag:102];
+    stateLabel.text = [NSString stringWithFormat:@"%@",[self chineseFromWeatherStatesString:state]];
     
     UIImageView *iconView = (UIImageView *)[self viewWithTag:103];
     UIImage *image = [self updataWeatherIcon:state];
@@ -52,7 +53,7 @@
         dateLabel.text = @"后天";
 }
 
-- (NSString *)updataWeatherStata:(MNCSimpleWeatherData *)simpleData {
+- (NSString *)updataWeatherState:(MNCSimpleWeatherData *)simpleData {
     return simpleData.conditionDay;
 }
 
@@ -103,31 +104,31 @@
 }
 
 - (NSString *)chineseFromWeatherStatesString:(NSString *)stateString {
-    if ([stateString isEqualToString:@"Cloudy"]) {//多云
+    if ([stateString isEqualToString:MNCWeatherStateCloudy]) {//多云
         return @"多云";
-    } else if ([stateString isEqualToString:@"shower rain"]) {//阵雨
+    } else if ([stateString isEqualToString:MNCWeatherStateShowerRain]) {//阵雨
         return @"阵雨";
-    } else if ([stateString isEqualToString:@"Overcast"]) { //阴
+    } else if ([stateString isEqualToString:MNCWeatherStateOvercast]) { //阴
         return @"阴天";
-    } else if ([stateString isEqualToString:@"Sunny"]) {//晴
+    } else if ([stateString isEqualToString:MNCWeatherStateSunnyClear]) {//晴
         return @"晴天";
-    } else if ([stateString isEqualToString:@"Partly Cloudy"]) {//晴间多云
+    } else if ([stateString isEqualToString:MNCWeatherStatePartlyCloudy]) {//晴间多云
         return @"晴间多云";
-    } else if ([stateString isEqualToString:@"Thundershower"]) {//雷阵雨
+    } else if ([stateString isEqualToString:MNCWeatherStateThundershower]) {//雷阵雨
         return @"雷阵雨";
-    } else if ([stateString isEqualToString:@"Light Rain"]) {//小雨
+    } else if ([stateString isEqualToString:MNCWeatherStateLightRain]) {//小雨
         return @"小雨";
-    } else if ([stateString isEqualToString:@"Heavy Rain"]) { //大雨
+    } else if ([stateString isEqualToString:MNCWeatherStateHeavyRain]) { //大雨
         return @"大雨";
-    } else if ([stateString isEqualToString:@"Storm"]) {//暴雨
+    } else if ([stateString isEqualToString:MNCWeatherStateStorm]) {//暴雨
         return @"暴雨";
-    } else if ([stateString isEqualToString:@"Light Snow"]) {//小雪
+    } else if ([stateString isEqualToString:MNCWeatherStateLightSnow]) {//小雪
         return @"小雪";
-    } else if ([stateString isEqualToString:@"Heavy Snow"]) {//大雪
+    } else if ([stateString isEqualToString:MNCWeatherStateHeavySnow]) {//大雪
         return @"大雪";
-    } else if ([stateString isEqualToString:@"Sleet"]) { //雨夹雪
+    } else if ([stateString isEqualToString:MNCWeatherStateSleet]) { //雨夹雪
         return @"雨夹雪";
-    } else if ([stateString isEqualToString:@"Sunny/Clear"]) {
+    } else if ([stateString isEqualToString:MNCWeatherStateSunnyClear]) {
         return @"晴天";
     }
     return @"未知";
@@ -135,31 +136,31 @@
 
 - (UIImage *)updataWeatherIcon:(NSString *)state {
     UIImage *icon = nil;
-    if ([state isEqualToString:@"Cloudy"]) {//多云
+    if ([state isEqualToString:MNCWeatherStateCloudy]) {//多云
         icon = [UIImage imageNamed:@"cloud.png"];
-    } else if ([state isEqualToString:@"shower rain"]) {//阵雨
+    } else if ([state isEqualToString:MNCWeatherStateShowerRain]) {//阵雨
         icon = [UIImage imageNamed:@"rainning.png"];
-    } else if ([state isEqualToString:@"Overcast"]) { //阴
+    } else if ([state isEqualToString:MNCWeatherStateOvercast]) { //阴
         icon = [UIImage imageNamed:@"cloud.png"];
-    } else if ([state isEqualToString:@"Sunny"]) {//晴
+    } else if ([state isEqualToString:MNCWeatherStateSunnyClear]) {//晴
         icon = [UIImage imageNamed:@"sunshine.png"];
-    } else if ([state isEqualToString:@"Partly Cloudy"]) {//晴间多云
+    } else if ([state isEqualToString:MNCWeatherStatePartlyCloudy]) {//晴间多云
         icon = [UIImage imageNamed:@"cloud.png"];
-    } else if ([state isEqualToString:@"Thundershower"]) {//雷阵雨
+    } else if ([state isEqualToString:MNCWeatherStateThundershower]) {//雷阵雨
         icon = [UIImage imageNamed:@"thunder.png"];
-    } else if ([state isEqualToString:@"Light Rain"]) {//小雨
+    } else if ([state isEqualToString:MNCWeatherStateLightRain]) {//小雨
         icon = [UIImage imageNamed:@"rainning.png"];
-    } else if ([state isEqualToString:@"Heavy Rain"]) { //大雨
+    } else if ([state isEqualToString:MNCWeatherStateHeavyRain]) { //大雨
         icon = [UIImage imageNamed:@"rainning.png"];
-    } else if ([state isEqualToString:@"Storm"]) {//暴雨
+    } else if ([state isEqualToString:MNCWeatherStateStorm]) {//暴雨
         icon = [UIImage imageNamed:@"rainning.png"];
-    } else if ([state isEqualToString:@"Light Snow"]) {//小雪
+    } else if ([state isEqualToString:MNCWeatherStateLightSnow]) {//小雪
         icon = [UIImage imageNamed:@"snowwing.png"];
-    } else if ([state isEqualToString:@"Heavy Snow"]) {//大雪
+    } else if ([state isEqualToString:MNCWeatherStateHeavySnow]) {//大雪
         icon = [UIImage imageNamed:@"snowwing.png"];
-    } else if ([state isEqualToString:@"Sleet"]) { //雨夹雪
+    } else if ([state isEqualToString:MNCWeatherStateSleet]) { //雨夹雪
         icon = [UIImage imageNamed:@"rainAndSnow.png"];
-    } else if ([state isEqualToString:@"Sunny/Clear"]) {//晴
+    } else if ([state isEqualToString:MNCWeatherStateSunnyClear]) {//晴
         icon = [UIImage imageNamed:@"sunshine.png"];
     }
     

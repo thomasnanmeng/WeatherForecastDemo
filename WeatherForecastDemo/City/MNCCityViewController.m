@@ -10,7 +10,6 @@
 #import "MNCCityNameGroup.h"
 
 //CityGroup.plist文件中保存的Key键
-static NSString * const kCityNameCKey = @"cityNameC";
 
 @interface MNCCityViewController () <UITableViewDelegate,UITableViewDataSource>
 @property (strong, nonatomic) MNCCityNameGroup *cityNameGroup;

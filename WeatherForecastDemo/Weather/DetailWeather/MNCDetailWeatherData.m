@@ -8,6 +8,7 @@
 
 #import "MNCDetailWeatherData.h"
 #import "MNCWeatherPropertiesFile.h"
+#import "MNCHeader.h"
 @interface MNCDetailWeatherData ()
 @property (strong, nonatomic) NSString *cityLatitude;     //城市纬度
 @property (strong, nonatomic) NSString *cityLongitude;    //城市经度
@@ -33,7 +34,10 @@
 {
     self = [super init];
     if (self) {
-        _dataFile = [[MNCWeatherPropertiesFile alloc] init];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(initDetailWeatherPropertiesFromPlist:)
+                                                     name:kMNCWeatherPropertiesFileDidChangeNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -46,78 +50,37 @@
 
 #pragma mark - Public methods
 
-- (void)initDetailWeatherPropertiesFromDic:(NSDictionary *)propretiesDic info:(NSString *)flag {
-    if ([flag isEqualToString:@"basic"]) {
-        [self initBisicWeatherProperties:propretiesDic];
-    } else {
-        [self initDetailWeatherProperties:propretiesDic];
-    }
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCDetailWeatherDataNotification"
-                                                        object:self];
-}
+
 
 #pragma mark - Private methods
 
-//初始化基本参数 basic
-- (void)initBisicWeatherProperties:(NSDictionary *)propretiesDic {
-    if ([propretiesDic count]) {
-        NSArray *propertiesArray = [propretiesDic allValues];
-        self.cityName = propertiesArray[0];
-        self.cityName = propertiesArray[1];
-        self.cityTimeZone = propertiesArray[2];
-        self.administrationZone = propertiesArray[3];
-        self.cityLongitude = propertiesArray[4];
-        self.cityLatitude = propertiesArray[5];
-        self.parentCity = propertiesArray[6];
-    }
-}
 
-//初始化today相关参数
-- (void)initDetailWeatherProperties:(NSDictionary *)propretiesDic {
-    if ([propretiesDic count]) {
-        NSArray *propertiesArray = [propretiesDic allValues];
-        self.temperatureMax = propertiesArray[2];
-        self.humidity = propertiesArray[3];
-        self.windSpeed = propertiesArray[4];
-        self.pressure = propertiesArray[6];
-        self.visibility = propertiesArray[8];
-        self.windDirection = propertiesArray[9];
-        self.conditionDay = propertiesArray[10];
-        self.conditionNight = propertiesArray[11];
-        self.date = propertiesArray[12];
-        self.temperatureMin = propertiesArray[15];
-        self.windForce = propertiesArray[16];
-    }
-}
-
-- (void)initDetailWeatherPropertiesFromPlist {
+- (void)initDetailWeatherPropertiesFromPlist:(NSNotification *)notification {
     //是一个数组   self.weatherDataFile.weatherPropertiesInFiled
     if (![self.dataFile.dataArray count]) {
         self.dataFile = [[MNCWeatherPropertiesFile alloc] init];
     }
     NSMutableDictionary *dic = [self.dataFile.dataArray objectAtIndex:0];
     for (NSString *weatherProperty in [dic allKeys]) {
-        if ([weatherProperty isEqualToString:@"admin_area"]) {
+        if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyAdministrationZone]) {
             self.administrationZone = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"cond_txt_d"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyConditionDay]) {
             self.conditionDay = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"cond_txt_n"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyConditionNight]) {
             self.conditionNight = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"date"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyDate]) {
             self.date = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"wind_sc"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyWindForce]) {
             self.windForce = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"location"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyCityName]) {
             self.cityName = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"tmp_max"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyTemperatureMax]) {
             self.temperatureMax = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"tmp_min"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyTemperatureMin]) {
             self.temperatureMin = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"pcpn"]) {
-            self.precipitation = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"vis"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyVisibility]) {
             self.visibility = [dic objectForKey:weatherProperty];
-        } else if ([weatherProperty isEqualToString:@"hum"]) {
+        } else if ([weatherProperty isEqualToString:kMNCWeatherPropertiesFileColumnsKeyHumidity]) {
             self.humidity = [dic objectForKey:weatherProperty];
         }
     }

@@ -9,6 +9,7 @@
 #import "MNCWeatherManager.h"
 #import "MNCDetailWeatherData.h"
 #import "MNCSimpleWeatherData.h"
+#import "MNCHeader.h"
 
 @interface MNCWeatherManager ()
 @property (strong, nonatomic) NSMutableDictionary *basicData;
@@ -71,8 +72,8 @@
     NSError *error = nil;
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *dataDic = [NSJSONSerialization JSONObjectWithData:jsonData
-                                                                options:NSJSONReadingMutableContainers
-                                                                  error:&error];
+                                                            options:NSJSONReadingMutableContainers
+                                                              error:&error];
     if (error) {
         NSLog(@"解析失败 error = %@",error);
         return ;
@@ -81,25 +82,11 @@
 }
 
 - (void)responseDicToPropretiesDic:(NSDictionary *)dataDic {
-    NSArray *responsArray = dataDic[@"HeWeather6"];
+    NSArray *responsArray = dataDic[kMNCWeatherPropertiesAPIHeaderKeyHeWeather6];
     if ([responsArray count]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCWeatherPropertiesFileNotification" object:responsArray];
-        for (NSDictionary *dic in responsArray) { //一共有四个dic
-            if (dic[@"basic"]) {
-                self.basicData = (NSMutableDictionary *)dic[@"basic"];
-                [self.detailData initDetailWeatherPropertiesFromDic:self.basicData
-                                                                      info:@"basic"];
-            }
-            if (dic[@"daily_forecast"]) {
-                self.tomorrowData = (NSMutableDictionary *)[dic[@"daily_forecast"] objectAtIndex:0];
-                [self.detailData initDetailWeatherPropertiesFromDic:self.tomorrowData info:@"today"];
-                self.tomorrowData = (NSMutableDictionary *)[dic[@"daily_forecast"] objectAtIndex:1];
-                [self.simpleData initSimpleWeatherPropertiesFromDic:self.tomorrowData];
-                self.afterTomorrowData = (NSMutableDictionary *)[dic[@"daily_forecast"] objectAtIndex:2];
-                [self.simpleData initSimpleWeatherPropertiesFromDic:self.afterTomorrowData];
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"MNCWeatherPropertiesFileNotification" object:self userInfo:@{@"key1":self.detailWeatherData,@"key2": self.simpleWeatherData}];
-            }
-        }
+        //是否需要一步把数据解析出来
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMNCDownloadedDataFromWeatherAPINotification object:responsArray];
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMNCDownloadedDataFromWeatherAPINotification object:self userInfo:@{@"key1":self.detailData,@"key2": self.simpleData}];
     }
 }
 
