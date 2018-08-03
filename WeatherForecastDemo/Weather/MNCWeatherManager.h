@@ -25,7 +25,6 @@
 
 - (void)useCityNameToRequestWeatherData:(NSString *)cityName;
 
-//- (void)responseDicToPropretiesDic:(NSDictionary *)responseDic;
-
 
 @end
+

@@ -73,8 +73,14 @@ static NSString * const  kMNCCityGroupFileColumnsKeyCityNameChinese = @"cityName
  NSNotification
  */
 
+static NSString * const kMNCWeatherPropertiesFileDidChangeToDetailNotification = @"fileDateDidChangeToDetail";
 static NSString * const kMNCWeatherPropertiesFileDidChangeNotification = @"fileDataDidChange";
 static NSString * const kMNCDownloadedDataFromWeatherAPINotification = @"downloadDataFromWeatherAPI";
+static NSString * const kMNCDetailDataDidChangeNotification = @"detailDataDidChange";
+static NSString * const kMNCSimpleDataDidChangeNotification = @"simpleDataDidChange";
+
+
 
 
 #endif /* MNCHeader_h */
+

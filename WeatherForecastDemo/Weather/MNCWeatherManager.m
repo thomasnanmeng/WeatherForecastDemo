@@ -79,12 +79,6 @@
     [self downloadedDataFromAPINotification:dataDic];
 }
 
-- (void)downloadedDataFromAPINotification:(NSDictionary *)dataDic {
-    if ([dataDic count]) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kMNCDownloadedDataFromWeatherAPINotification object:self userInfo:dataDic];
-    }
-}
-
 - (NSString *)pinYinWithChineseString:(NSString *)chineseStr {
     NSString *pinYinStr = [NSString string];
     if (chineseStr.length){
@@ -107,4 +101,15 @@
     return pinYinStr;
 }
 
+#pragma mark - Notification
+
+- (void)downloadedDataFromAPINotification:(NSDictionary *)dataDic {
+    if ([dataDic count]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kMNCDownloadedDataFromWeatherAPINotification object:self userInfo:dataDic];
+    }
+}
+
+
+
 @end
+

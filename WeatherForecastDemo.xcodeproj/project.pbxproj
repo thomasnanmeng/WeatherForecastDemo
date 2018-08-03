@@ -45,6 +45,7 @@
 		07F310402105D23500F307F9 /* MNCDetailWeatherViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F3103E2105D23500F307F9 /* MNCDetailWeatherViewController.m */; };
 		07F310412105D23500F307F9 /* MNCDetailWeatherViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 07F3103F2105D23500F307F9 /* MNCDetailWeatherViewController.xib */; };
 		07F310442105EA5100F307F9 /* MNCSimpleWeatherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F310432105EA5100F307F9 /* MNCSimpleWeatherView.m */; };
+		07F631C92113FFB500638753 /* MNCDetailWeatherView.m in Sources */ = {isa = PBXBuildFile; fileRef = 07F631C82113FFB500638753 /* MNCDetailWeatherView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +113,8 @@
 		07F3103F2105D23500F307F9 /* MNCDetailWeatherViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MNCDetailWeatherViewController.xib; sourceTree = "<group>"; };
 		07F310422105EA5100F307F9 /* MNCSimpleWeatherView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNCSimpleWeatherView.h; sourceTree = "<group>"; };
 		07F310432105EA5100F307F9 /* MNCSimpleWeatherView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MNCSimpleWeatherView.m; sourceTree = "<group>"; };
+		07F631C72113FFB500638753 /* MNCDetailWeatherView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MNCDetailWeatherView.h; sourceTree = "<group>"; };
+		07F631C82113FFB500638753 /* MNCDetailWeatherView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MNCDetailWeatherView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +151,8 @@
 				07F3103D2105D23500F307F9 /* MNCDetailWeatherViewController.h */,
 				07F3103E2105D23500F307F9 /* MNCDetailWeatherViewController.m */,
 				07F3103F2105D23500F307F9 /* MNCDetailWeatherViewController.xib */,
+				07F631C72113FFB500638753 /* MNCDetailWeatherView.h */,
+				07F631C82113FFB500638753 /* MNCDetailWeatherView.m */,
 				07DA1EE72100C36A0052104D /* MNCDetailWeatherData.h */,
 				07DA1EE82100C36A0052104D /* MNCDetailWeatherData.m */,
 			);
@@ -415,6 +420,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				07E9349B20FD991700667897 /* MNCCityViewController.m in Sources */,
+				07F631C92113FFB500638753 /* MNCDetailWeatherView.m in Sources */,
 				07DA1EE92100C36A0052104D /* MNCDetailWeatherData.m in Sources */,
 				07F310402105D23500F307F9 /* MNCDetailWeatherViewController.m in Sources */,
 				07DA1EE6210087210052104D /* MNCWeatherPropertiesFile.m in Sources */,

@@ -27,3 +27,4 @@
 @property (weak, nonatomic) id <MNCDetailViewControllerDelegate> delegate;
 
 @end
+

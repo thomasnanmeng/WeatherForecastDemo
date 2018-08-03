@@ -8,9 +8,11 @@
 
 #import "MNCDetailWeatherViewController.h"
 #import "MNCDetailWeatherData.h"
-
+#import "MNCDetailWeatherView.h"
+#import "MNCHeader.h"
 @interface MNCDetailWeatherViewController ()
 @property (strong, nonatomic) MNCDetailWeatherData *detailData;
+@property (strong, nonatomic) MNCDetailWeatherView *detailView;
 @property (strong, nonatomic) UIImageView *imageView;
 
 @end
@@ -21,8 +23,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self createUI];
-    [self createUIData];
+    [self createDetailView];
+    [self updataDetailData];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(updataDetailDataNotify:)
+                                                 name:kMNCDetailDataDidChangeNotification
+                                               object:nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -32,60 +38,28 @@
 
 #pragma mark - Private methods
 
-- (void)createUI {
-    CGRect rect= self.view.bounds;
-    UILabel *cityNameLabel = [[UILabel alloc] initWithFrame:
-                         CGRectMake(rect.origin.x + 100,
-                                    rect.origin.y + 30,
-                                    (rect.size.width - 200) / 2 + 100,
-                                    50)];
-    cityNameLabel.tag = 100;
-    cityNameLabel.font = [UIFont fontWithName:@"Arial" size:40];
-    cityNameLabel.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:cityNameLabel];
-    
-    UILabel *temperatureLabel = [[UILabel alloc] initWithFrame:
-                            CGRectMake(rect.origin.x + 100,
-                                       rect.origin.y + 70,
-                                       (rect.size.width - 200) / 2 + 100,
-                                       rect.size.height / 6)];
-    temperatureLabel.tag = 101;
-    temperatureLabel.font = [UIFont fontWithName:@"Arial" size:40];
-    temperatureLabel.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:temperatureLabel];
-    
-    UILabel *moreElementLabel = [[UILabel alloc] initWithFrame:
-                                       CGRectMake(rect.origin.x,
-                                                  rect.origin.y + 30 + temperatureLabel.bounds.size.height,
-                                                  rect.size.width + 30,
-                                                  50)];
-    moreElementLabel.font = [UIFont fontWithName:@"Arial" size:17];
-    moreElementLabel.textAlignment = NSTextAlignmentCenter;
-    moreElementLabel.tag = 102;
-    [self.view addSubview:moreElementLabel];
+- (void)createDetailView {
+    self.detailView = [[MNCDetailWeatherView alloc] init];
+    self.detailView.frame = CGRectMake(0, 0, kScreenW, kScreenH / 2.5);
+    //self.detailView.backgroundColor = [UIColor yellowColor];
+    [self.view addSubview:self.detailView];
 }
 
-- (void)createUIData {
+- (void)updataDetailData {
     NSString *cityName = self.detailData.cityName;
     NSString *temperatureMax = self.detailData.temperatureMax;
     NSString *temperatureMin = self.detailData.temperatureMin;
     NSString *humidity = self.detailData.humidity;
     NSString *state = self.detailData.humidity;
     NSString *windForce = self.detailData.windForce;
-    
-    UILabel *cityNameLabel = (UILabel *)[self.view viewWithTag:100];
-    cityNameLabel.text = [NSString stringWithFormat:@"%@",[self pinYinToChinese:cityName]];
-    
-    UILabel *tempMaxLabel = (UILabel *)[self.view viewWithTag:101];
-    tempMaxLabel.text = [NSString stringWithFormat:@"%d℃",(([temperatureMax intValue] - 32) * 5 / 9)];
-    
-    UILabel *moreElementLabel = (UILabel *)[self.view viewWithTag:102];
-    moreElementLabel.text = [NSString stringWithFormat:@"温度:%d/%d℃  湿度:%@ 风力:%@ %@",
-                                   (([temperatureMax intValue] - 32) * 5 / 9),
-                                   (([temperatureMin intValue] - 32) * 5 / 9),
-                                   humidity,
-                                   windForce,
-                                   state];
+    self.detailView.cityNameLabel.text = [NSString stringWithFormat:@"%@",[self pinYinToChinese:cityName]];
+    self.detailView.temperatureLabel.text = [NSString stringWithFormat:@"%d℃",(([temperatureMax intValue] - 32) * 5 / 9)];
+    self.detailView.moreElementLabel.text = [NSString stringWithFormat:@"温度:%d/%d℃  湿度:%@ 风力:%@ %@",
+                                             (([temperatureMax intValue] - 32) * 5 / 9),
+                                             (([temperatureMin intValue] - 32) * 5 / 9),
+                                             humidity,
+                                             windForce,
+                                             state];
 }
 
 - (NSString *)pinYinToChinese:(NSString *)pinYin {
@@ -114,15 +88,10 @@
 
 #pragma mark - Notification
 
-- (void)updataDetailUIData {
-    [self createUIData];
-}
-
-- (void)updataDetailWeatherUIData:(NSNotification *)notification {
+- (void)updataDetailDataNotify:(NSNotification *)notification {
     self.detailData = notification.object;
-    //更新数据时，更新背景
+    [self updataDetailData];
     [_delegate updataWeatherBackgroundImage:self.detailData.conditionDay];
-    [self updataDetailUIData];
 }
 
 - (void)removeNotification {

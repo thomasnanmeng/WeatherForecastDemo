@@ -16,4 +16,7 @@
 
 @property (strong, nonatomic) NSArray *dataArray;
 
++ (MNCWeatherPropertiesFile *)sharedInstance;
+
+
 @end
